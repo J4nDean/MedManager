@@ -1,4 +1,3 @@
-// src/main/java/com/example/medicalsystem/repository/UserRepository.java
 package com.example.backendmedmanager.repository;
 
 import com.example.backendmedmanager.entity.User;
