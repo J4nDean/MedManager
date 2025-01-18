@@ -24,9 +24,9 @@ public class UserController {
         return ResponseEntity.ok(newUser);
     }
 
-    // Opcjonalny endpoint GET do pobierania użytkowników
     @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
     }
 }

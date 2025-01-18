@@ -32,6 +32,8 @@ public class User {
     @Column(name = "haslo", nullable = false)
     private String haslo;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "rola", nullable = false)
-    private String rola;
+    @Builder.Default
+    private UserRole rola = UserRole.PACJENT;
 }
