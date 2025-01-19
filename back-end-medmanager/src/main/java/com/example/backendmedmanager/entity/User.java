@@ -23,14 +23,17 @@ public class User {
     @Column(name = "nazwisko", nullable = false)
     private String nazwisko;
 
-    @Column(name = "pesel", length = 11, nullable = false)
+    @Column(name = "pesel", length = 11, nullable = false, unique = true)
     private String pesel;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "haslo", nullable = false)
     private String haslo;
+
+    @Column(name = "telefon", length = 9)
+    private String telefon;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "rola", nullable = false)

@@ -1,4 +1,4 @@
-package com.example.backendmedmanager.dto;
+package com.example.backendmedmanager.dto.user;
 
 import lombok.Data;
 
@@ -9,5 +9,6 @@ public class UserDto {
     private String pesel;
     private String email;
     private String haslo;
+    private String telefon;
     private String rola;
 }
