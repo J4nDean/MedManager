@@ -1,6 +1,6 @@
 package com.example.backendmedmanager.service;
 
-import com.example.backendmedmanager.dto.user.UserDto;
+import com.example.backendmedmanager.dto.UserDto;
 import com.example.backendmedmanager.entity.User;
 import com.example.backendmedmanager.entity.UserRole;
 import com.example.backendmedmanager.repository.UserRepository;

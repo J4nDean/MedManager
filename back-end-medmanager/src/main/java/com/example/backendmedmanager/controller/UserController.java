@@ -1,6 +1,6 @@
 package com.example.backendmedmanager.controller;
 
-import com.example.backendmedmanager.dto.user.UserDto;
+import com.example.backendmedmanager.dto.UserDto;
 import com.example.backendmedmanager.entity.User;
 import com.example.backendmedmanager.service.UserService;
 import lombok.RequiredArgsConstructor;

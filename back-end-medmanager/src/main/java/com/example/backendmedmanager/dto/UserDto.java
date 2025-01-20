@@ -1,4 +1,4 @@
-package com.example.backendmedmanager.dto.user;
+package com.example.backendmedmanager.dto;
 
 import lombok.Data;
 
