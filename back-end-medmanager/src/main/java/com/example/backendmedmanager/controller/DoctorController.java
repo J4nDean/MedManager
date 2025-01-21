@@ -43,10 +43,12 @@ public class DoctorController {
     public ResponseEntity<PrescriptionDTO> createPrescription(
             @PathVariable Long doctorId,
             @PathVariable Long patientId,
-            @RequestParam String description,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime expiryDate) {
+            @RequestBody PrescriptionDTO prescriptionDTO) {
+        // Dodajmy logowanie
+        System.out.println("Received prescription data: " + prescriptionDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(doctorService.addPrescription(doctorId, patientId, description, expiryDate));
+                .body(doctorService.addPrescription(doctorId, patientId,
+                        prescriptionDTO.getDescription(), prescriptionDTO.getExpiryDate()));
     }
 
     @DeleteMapping("/{doctorId}/prescriptions/{prescriptionId}")

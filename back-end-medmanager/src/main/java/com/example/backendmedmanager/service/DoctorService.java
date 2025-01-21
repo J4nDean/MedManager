@@ -36,14 +36,21 @@ public class DoctorService {
     }
 
     public List<DoctorDTO> getAllDoctors() {
-        List<Doctor> doctors = doctorRepository.findAll();
-        List<DoctorDTO> doctorDTOs = new ArrayList<>();
+        return doctorRepository.findAllWithUsers().stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
 
-        for (Doctor doctor : doctors) {
-            DoctorDTO dto = convertToDto(doctor);
-            doctorDTOs.add(dto);
+    private DoctorDTO convertToDto(Doctor doctor) {
+        DoctorDTO dto = new DoctorDTO();
+        dto.setId(doctor.getId());
+        dto.setFirstName(doctor.getFirstName());
+        dto.setLastName(doctor.getLastName());
+        dto.setSpecialization(doctor.getSpecialization());
+        if (doctor.getUser() != null) {
+            dto.setEmail(doctor.getUser().getLogin());
         }
-        return doctorDTOs;
+        return dto;
     }
 
     public List<PatientDTO> getPatientsByDoctor(Long doctorId) {
@@ -70,6 +77,13 @@ public class DoctorService {
     }
 
     public PrescriptionDTO addPrescription(Long doctorId, Long patientId, String description, LocalDateTime expiryDate) {
+        if (expiryDate == null) {
+            throw new RuntimeException("Expiry date cannot be null");
+        }
+        if (expiryDate.isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Expiry date cannot be in the past");
+        }
+
         Doctor doctor = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new RuntimeException("Doctor not found"));
         Patient patient = patientRepository.findById(patientId)
@@ -87,23 +101,14 @@ public class DoctorService {
         prescription.setStatus(String.valueOf(PrescriptionStatus.ACTIVE));
         prescription.setIssueDate(LocalDateTime.now());
 
-        prescription = prescriptionRepository.save(prescription);
-        return convertToPrescriptionDto(prescription);
+        Prescription savedPrescription = prescriptionRepository.save(prescription);
+        return convertToPrescriptionDto(savedPrescription);
     }
 
     public void removePrescription(Long doctorId, Long prescriptionId) {
         Prescription prescription = prescriptionRepository.findByIdAndDoctorId(prescriptionId, doctorId)
                 .orElseThrow(() -> new RuntimeException("Prescription not found"));
         prescriptionRepository.delete(prescription);
-    }
-
-    private DoctorDTO convertToDto(Doctor doctor) {
-        DoctorDTO dto = new DoctorDTO();
-        dto.setId(doctor.getId());
-        dto.setFirstName(doctor.getFirstName());
-        dto.setLastName(doctor.getLastName());
-        dto.setSpecialization(doctor.getSpecialization());
-        return dto;
     }
 
     private PatientDTO convertToPatientDto(Patient patient, LocalDateTime assignmentDate) {
@@ -139,5 +144,4 @@ public class DoctorService {
         dto.setStatus(PrescriptionStatus.valueOf(prescription.getStatus()));
         return dto;
     }
-
 }

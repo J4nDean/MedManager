@@ -13,9 +13,12 @@ import java.util.Optional;
 
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
+    @Query("SELECT d FROM Doctor d LEFT JOIN FETCH d.user u")
+    List<Doctor> findAllWithUsers();
+
     Optional<Doctor> findByUserId(Long userId);
 
-    @Query("SELECT d FROM Doctor d " +
+    @Query("SELECT d FROM Doctor d LEFT JOIN FETCH d.user u " +
             "WHERE (:firstName is null OR lower(d.firstName) LIKE lower(concat('%', :firstName, '%'))) " +
             "AND (:lastName is null OR lower(d.lastName) LIKE lower(concat('%', :lastName, '%'))) " +
             "AND (:specialization is null OR lower(d.specialization) LIKE lower(concat('%', :specialization, '%')))")

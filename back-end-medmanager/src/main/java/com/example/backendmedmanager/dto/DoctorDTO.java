@@ -1,15 +1,14 @@
 package com.example.backendmedmanager.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 public class DoctorDTO {
     private Long id;
     private String firstName;
     private String lastName;
     private String specialization;
+    private String email;
 }
