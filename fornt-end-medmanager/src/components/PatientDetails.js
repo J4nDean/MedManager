@@ -119,7 +119,6 @@ function PatientDetails() {
             </div>
 
             <div className="content-grid">
-                {/* Formularz dodawania recepty */}
                 <div className="card">
                     <div className="card-header">
                         Nowa Recepta

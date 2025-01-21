@@ -200,15 +200,13 @@ public class DoctorService {
         dto.setIssueDate(prescription.getIssueDate());
         dto.setExpiryDate(prescription.getExpiryDate());
 
-        // Safe status conversion
         try {
             dto.setStatus(PrescriptionStatus.valueOf(prescription.getStatus()));
         } catch (IllegalArgumentException e) {
             logger.error("Invalid prescription status: {}", prescription.getStatus());
-            dto.setStatus(PrescriptionStatus.ACTIVE); // Default to ACTIVE if invalid
+            dto.setStatus(PrescriptionStatus.ACTIVE);
         }
 
-        // Null-safe doctor information handling
         if (prescription.getDoctor() != null) {
             dto.setDoctorFirstName(prescription.getDoctor().getFirstName());
             dto.setDoctorLastName(prescription.getDoctor().getLastName());
