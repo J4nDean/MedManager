@@ -1,20 +1,20 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function DoctorDashboard() {
+    const { doctorId } = useParams();
     const [patients, setPatients] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const API_BASE_URL = 'http://localhost:8080';
-    const DOCTOR_ID = 1;
 
     useEffect(() => {
         const fetchPatients = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(`${API_BASE_URL}/api/doctors/${DOCTOR_ID}/patients`);
+                const response = await fetch(`${API_BASE_URL}/api/doctors/${doctorId}/patients`);
                 if (!response.ok) {
                     throw new Error('Nie udało się pobrać listy pacjentów');
                 }
@@ -29,7 +29,7 @@ function DoctorDashboard() {
         };
 
         fetchPatients();
-    }, []);
+    }, [doctorId]);
 
     if (loading) {
         return (
@@ -83,7 +83,7 @@ function DoctorDashboard() {
                                     </td>
                                     <td>
                                         <button
-                                            onClick={() => navigate(`/doctors/${DOCTOR_ID}/patients/${patient.id}`)}
+                                            onClick={() => navigate(`/doctors/${doctorId}/patient/${patient.id}`)}
                                             className="btn btn-primary"
                                         >
                                             Szczegóły

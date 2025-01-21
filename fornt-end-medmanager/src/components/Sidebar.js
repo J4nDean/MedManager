@@ -16,34 +16,10 @@ function Sidebar() {
                 <ul className="nav-list">
                     <li>
                         <Link
-                            to="/doctor/dashboard"
-                            className={`nav-item ${isActive('/doctor/dashboard')}`}
+                            to="/"
+                            className={`nav-item ${isActive('/')}`}
                         >
-                            Panel Lekarza
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            to="/prescriptions"
-                            className={`nav-item ${isActive('/prescriptions')}`}
-                        >
-                            Recepty
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            to="/schedule"
-                            className={`nav-item ${isActive('/schedule')}`}
-                        >
-                            Harmonogram
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            to="/profile"
-                            className={`nav-item ${isActive('/profile')}`}
-                        >
-                            Mój Profil
+                            Strona Główna
                         </Link>
                     </li>
                 </ul>

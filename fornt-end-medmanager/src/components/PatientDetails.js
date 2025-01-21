@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { Trash2 } from 'lucide-react';
 
 function PatientDetails() {
-    const { doctorId, patientId } = useParams(); // Dodano doctorId z parametrów URL
+    const { doctorId, patientId } = useParams();
     const [patient, setPatient] = useState(null);
     const [newPrescription, setNewPrescription] = useState({
         description: '',
@@ -14,7 +15,7 @@ function PatientDetails() {
 
     useEffect(() => {
         fetchPatientDetails();
-    }, [patientId, doctorId]); // Dodano doctorId jako zależność
+    }, [patientId, doctorId]);
 
     const fetchPatientDetails = async () => {
         try {
@@ -59,6 +60,23 @@ function PatientDetails() {
             setError('');
         } catch (err) {
             setError('Błąd: ' + err.message);
+            console.error('Error:', err);
+        }
+    };
+
+    const handleDeletePrescription = async (prescriptionId) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/doctors/${doctorId}/prescriptions/${prescriptionId}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                throw new Error('Nie udało się usunąć recepty');
+            }
+
+            await fetchPatientDetails();
+        } catch (err) {
+            setError('Błąd podczas usuwania recepty: ' + err.message);
             console.error('Error:', err);
         }
     };
@@ -149,6 +167,7 @@ function PatientDetails() {
                                 <th>Data wystawienia</th>
                                 <th>Data ważności</th>
                                 <th>Status</th>
+                                <th>Akcje</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -162,6 +181,15 @@ function PatientDetails() {
                                         <span className={`status-badge ${getStatusClass(prescription.status)}`}>
                                             {getStatusText(prescription.status)}
                                         </span>
+                                    </td>
+                                    <td>
+                                        <button
+                                            onClick={() => handleDeletePrescription(prescription.id)}
+                                            className="btn-icon text-red-600 hover:text-red-700"
+                                            title="Usuń receptę"
+                                        >
+                                            <Trash2 size={20} />
+                                        </button>
                                     </td>
                                 </tr>
                             ))}

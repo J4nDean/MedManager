@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Mail, Save, X } from 'lucide-react';
+import { useParams } from 'react-router-dom';
 
 const PatientDashboard = () => {
+    const { patientId } = useParams();
     const [patient, setPatient] = useState(null);
     const [prescriptions, setPrescriptions] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -9,17 +11,16 @@ const PatientDashboard = () => {
     const [isEditingEmail, setIsEditingEmail] = useState(false);
     const [newEmail, setNewEmail] = useState('');
 
-    const PATIENT_ID = 1;
     const API_BASE_URL = 'http://localhost:8080';
 
     useEffect(() => {
         fetchPatientData();
         fetchPrescriptions();
-    }, []);
+    }, [patientId]);
 
     const fetchPatientData = async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/api/patients/${PATIENT_ID}`);
+            const response = await fetch(`${API_BASE_URL}/api/patients/${patientId}`);
             if (!response.ok) throw new Error('Nie udało się pobrać danych pacjenta');
             const data = await response.json();
             setPatient(data);
@@ -32,7 +33,7 @@ const PatientDashboard = () => {
 
     const fetchPrescriptions = async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/api/patients/${PATIENT_ID}/prescriptions`);
+            const response = await fetch(`${API_BASE_URL}/api/patients/${patientId}/prescriptions`);
             if (!response.ok) throw new Error('Nie udało się pobrać recept');
             const data = await response.json();
             setPrescriptions(data);
@@ -46,7 +47,7 @@ const PatientDashboard = () => {
 
     const handleEmailUpdate = async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/api/patients/${PATIENT_ID}/email`, {
+            const response = await fetch(`${API_BASE_URL}/api/patients/${patientId}/email`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -178,9 +179,9 @@ const PatientDashboard = () => {
                                         {new Date(prescription.expiryDate).toLocaleDateString('pl-PL')}
                                     </td>
                                     <td>
-                                            <span className={`status-badge status-${prescription.status.toLowerCase()}`}>
-                                                {prescription.status}
-                                            </span>
+                                        <span className={`status-badge status-${prescription.status.toLowerCase()}`}>
+                                            {prescription.status}
+                                        </span>
                                     </td>
                                 </tr>
                             ))}

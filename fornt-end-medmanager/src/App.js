@@ -14,9 +14,9 @@ function App() {
                 <div className="main-content">
                     <Routes>
                         <Route path="/" element={<HomePage />} />
-                        <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
-                        <Route path="/doctors/:doctorId/patients/:patientId" element={<PatientDetails />} />
-                        <Route path="/patient/dashboard" element={<PatientDashboard />} />
+                        <Route path="/doctors/:doctorId/dashboard" element={<DoctorDashboard />} />
+                        <Route path="/doctors/:doctorId/patient/:patientId" element={<PatientDetails />} />
+                        <Route path="/patients/:patientId/dashboard" element={<PatientDashboard />} />
                     </Routes>
                 </div>
             </div>
