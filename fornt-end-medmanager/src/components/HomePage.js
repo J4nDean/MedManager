@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { Search } from 'lucide-react';
 
 function HomePage() {
@@ -12,7 +11,7 @@ function HomePage() {
     const [error, setError] = useState('');
 
     const API_BASE_URL = 'http://localhost:8080';
-    const ITEMS_PER_PAGE = 10;
+    const ITEMS_PER_PAGE = 5;
 
     useEffect(() => {
         fetchDoctors();
@@ -26,7 +25,6 @@ function HomePage() {
             const data = await response.json();
             setDoctors(data);
 
-            // Ekstrakcja unikalnych specjalizacji
             const uniqueSpecialties = [...new Set(data.map(doctor => doctor.specialization))];
             setSpecialties(uniqueSpecialties);
         } catch (err) {
@@ -37,10 +35,9 @@ function HomePage() {
         }
     };
 
-    // Mapowanie danych lekarzy aby zawierały email
     const mappedDoctors = doctors.map(doctor => ({
         ...doctor,
-        email: doctor.user ? doctor.user.login : 'Brak adresu email'
+        email: doctor.email || 'Brak adresu email'
     }));
 
     const filteredDoctors = mappedDoctors.filter(doctor => {
@@ -51,13 +48,10 @@ function HomePage() {
         return matchesSearch && matchesSpecialty;
     });
 
-    // Paginacja
     const indexOfLastDoctor = currentPage * ITEMS_PER_PAGE;
     const indexOfFirstDoctor = indexOfLastDoctor - ITEMS_PER_PAGE;
     const currentDoctors = filteredDoctors.slice(indexOfFirstDoctor, indexOfLastDoctor);
     const totalPages = Math.ceil(filteredDoctors.length / ITEMS_PER_PAGE);
-
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     if (loading) return (
         <div className="loading-state">
@@ -120,7 +114,6 @@ function HomePage() {
                             <th>Imię i Nazwisko</th>
                             <th>Email</th>
                             <th>Specjalizacja</th>
-                            <th>Akcje</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -129,19 +122,11 @@ function HomePage() {
                                 <td>{doctor.firstName} {doctor.lastName}</td>
                                 <td>{doctor.email}</td>
                                 <td>{doctor.specialization}</td>
-                                <td>
-                                    <Link
-                                        to={`/doctors/${doctor.id}`}
-                                        className="btn btn-primary btn-sm"
-                                    >
-                                        Zobacz profil
-                                    </Link>
-                                </td>
                             </tr>
                         ))}
                         {currentDoctors.length === 0 && (
                             <tr>
-                                <td colSpan="4" className="text-center py-4 text-gray-500">
+                                <td colSpan="3" className="text-center py-4 text-gray-500">
                                     Nie znaleziono lekarzy spełniających kryteria wyszukiwania
                                 </td>
                             </tr>
@@ -151,15 +136,31 @@ function HomePage() {
 
                     {totalPages > 1 && (
                         <div className="pagination">
+                            <button
+                                className="pagination-button"
+                                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                                disabled={currentPage === 1}
+                            >
+                                Poprzednia
+                            </button>
+
                             {Array.from({ length: totalPages }, (_, i) => i + 1).map(number => (
                                 <button
                                     key={number}
                                     className={`pagination-button ${currentPage === number ? 'active' : ''}`}
-                                    onClick={() => paginate(number)}
+                                    onClick={() => setCurrentPage(number)}
                                 >
                                     {number}
                                 </button>
                             ))}
+
+                            <button
+                                className="pagination-button"
+                                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                                disabled={currentPage === totalPages}
+                            >
+                                Następna
+                            </button>
                         </div>
                     )}
                 </div>

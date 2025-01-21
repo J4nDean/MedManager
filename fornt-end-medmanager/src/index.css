@@ -192,31 +192,50 @@ body {
     background-color: #f9fafb;
 }
 
-/* Button styles */
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-    font-weight: 500;
+/* Search Section Styles */
+.search-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.search-field {
+    position: relative;
+}
+
+.search-input-wrapper {
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+}
+
+.search-input {
+    padding-left: 2.5rem;
+}
+
+/* Error messages */
+.error-message {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: #fee2e2;
+    border: 1px solid #fecaca;
     border-radius: 0.375rem;
-    transition: all 0.2s;
+    color: #991b1b;
 }
 
-.btn-sm {
-    padding: 0.375rem 0.75rem;
-    font-size: 0.75rem;
-}
-
-.btn-primary {
-    background-color: #2563eb;
-    color: white;
-    border: none;
-}
-
-.btn-primary:hover {
-    background-color: #1d4ed8;
+/* Loading state */
+.loading-state {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+    color: #6b7280;
 }
 
 /* Form Elements */
@@ -247,51 +266,89 @@ body {
     box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
 }
 
-.form-textarea {
-    width: 100%;
-    min-height: 100px;
-    padding: 0.5rem;
-    font-size: 0.875rem;
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
-    transition: border-color 0.2s;
-    resize: vertical;
+/* Patient Dashboard Styles */
+.patient-dashboard {
+    max-width: 64rem;
+    margin: 0 auto;
+    padding: 1rem;
 }
 
-.form-textarea:focus {
-    outline: none;
-    border-color: #2563eb;
-    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
-}
-
-/* Search Section Styles */
-.search-grid {
+.profile-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
 }
 
-.search-field {
-    position: relative;
+.profile-grid-full {
+    grid-column: span 2;
 }
 
-.search-input-wrapper {
-    position: relative;
+.profile-label {
+    color: #4B5563;
+    margin-bottom: 0.25rem;
 }
 
-.search-icon {
-    position: absolute;
-    left: 0.75rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #9ca3af;
+.profile-value {
+    font-weight: 500;
 }
 
-.search-input {
-    padding-left: 2.5rem;
+.email-edit-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-/* Status and Specialty Badges */
+.email-input {
+    flex: 1;
+}
+
+.icon-button {
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.icon-button-save {
+    color: #059669;
+}
+
+.icon-button-save:hover {
+    color: #047857;
+}
+
+.icon-button-cancel {
+    color: #DC2626;
+}
+
+.icon-button-cancel:hover {
+    color: #B91C1C;
+}
+
+.icon-button-edit {
+    color: #2563EB;
+}
+
+.icon-button-edit:hover {
+    color: #1D4ED8;
+}
+
+.dashboard-heading {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.prescriptions-heading {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.empty-prescriptions {
+    color: #6B7280;
+    text-align: center;
+    padding: 1rem 0;
+}
+
+/* Status Badges */
 .status-badge {
     display: inline-flex;
     align-items: center;
@@ -299,16 +356,7 @@ body {
     font-size: 0.75rem;
     font-weight: 500;
     border-radius: 9999px;
-}
-
-.specialty-badge {
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
-    background-color: #e5e7eb;
-    color: #374151;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 500;
+    text-transform: uppercase;
 }
 
 .status-active {
@@ -324,36 +372,6 @@ body {
 .status-completed {
     background-color: #e5e7eb;
     color: #374151;
-}
-
-/* Error messages */
-.error-message {
-    padding: 1rem;
-    margin-bottom: 1rem;
-    background-color: #fee2e2;
-    border: 1px solid #fecaca;
-    border-radius: 0.375rem;
-    color: #991b1b;
-}
-.status-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.25rem 0.75rem;
-    font-size: 0.75rem;
-    font-weight: 500;
-    border-radius: 9999px;
-    text-align: center;
-    min-width: 100px;
-    justify-content: center;
-}
-
-/* Loading state */
-.loading-state {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 200px;
-    color: #6b7280;
 }
 
 /* Pagination Styles */

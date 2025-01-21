@@ -8,7 +8,6 @@ function DoctorDashboard() {
     const navigate = useNavigate();
 
     const API_BASE_URL = 'http://localhost:8080';
-    // Docelowo ID powinno pochodzić z kontekstu autoryzacji
     const DOCTOR_ID = 1;
 
     useEffect(() => {
@@ -84,7 +83,7 @@ function DoctorDashboard() {
                                     </td>
                                     <td>
                                         <button
-                                            onClick={() => navigate(`/patients/${patient.id}`)}
+                                            onClick={() => navigate(`/doctors/${DOCTOR_ID}/patients/${patient.id}`)}
                                             className="btn btn-primary"
                                         >
                                             Szczegóły

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 function PatientDetails() {
-    const { patientId } = useParams();
+    const { doctorId, patientId } = useParams(); // Dodano doctorId z parametrów URL
     const [patient, setPatient] = useState(null);
     const [newPrescription, setNewPrescription] = useState({
         description: '',
@@ -14,11 +14,11 @@ function PatientDetails() {
 
     useEffect(() => {
         fetchPatientDetails();
-    }, [patientId]);
+    }, [patientId, doctorId]); // Dodano doctorId jako zależność
 
     const fetchPatientDetails = async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/api/doctors/1/patients/${patientId}`);
+            const response = await fetch(`${API_BASE_URL}/api/doctors/${doctorId}/patients/${patientId}`);
             if (!response.ok) throw new Error('Failed to fetch patient details');
             const data = await response.json();
             setPatient(data);
@@ -35,7 +35,7 @@ function PatientDetails() {
                 return;
             }
 
-            const response = await fetch(`${API_BASE_URL}/api/doctors/1/patients/${patientId}/prescriptions`, {
+            const response = await fetch(`${API_BASE_URL}/api/doctors/${doctorId}/patients/${patientId}/prescriptions`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -144,6 +144,7 @@ function PatientDetails() {
                         <table className="table">
                             <thead>
                             <tr>
+                                <th>Lekarz</th>
                                 <th>Opis</th>
                                 <th>Data wystawienia</th>
                                 <th>Data ważności</th>
@@ -153,13 +154,14 @@ function PatientDetails() {
                             <tbody>
                             {patient.prescriptions?.map(prescription => (
                                 <tr key={prescription.id}>
+                                    <td>{prescription.doctorFirstName} {prescription.doctorLastName}</td>
                                     <td>{prescription.description}</td>
                                     <td>{new Date(prescription.issueDate).toLocaleString()}</td>
                                     <td>{new Date(prescription.expiryDate).toLocaleString()}</td>
                                     <td>
-                                            <span className={`status-badge ${getStatusClass(prescription.status)}`}>
-                                                {getStatusText(prescription.status)}
-                                            </span>
+                                        <span className={`status-badge ${getStatusClass(prescription.status)}`}>
+                                            {getStatusText(prescription.status)}
+                                        </span>
                                     </td>
                                 </tr>
                             ))}

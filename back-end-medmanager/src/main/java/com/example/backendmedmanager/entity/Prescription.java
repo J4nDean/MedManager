@@ -15,23 +15,28 @@ public class Prescription {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
     @Column(nullable = false)
     private String description;
 
-    @Column(name = "issue_date", nullable = false)
+    @Column(name = "issue_date")
     private LocalDateTime issueDate;
 
     @Column(name = "expiry_date", nullable = false)
     private LocalDateTime expiryDate;
 
-    @Column(nullable = false)
-    private String status;
+    @Column(length = 20)
+    private String status = "ACTIVE";
+
+    @PrePersist
+    protected void onCreate() {
+        issueDate = LocalDateTime.now();
+    }
 }

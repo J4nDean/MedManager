@@ -16,4 +16,7 @@ public class PrescriptionDTO {
     private LocalDateTime issueDate;
     private LocalDateTime expiryDate;
     private PrescriptionStatus status;
+    private String doctorFirstName;
+    private String doctorLastName;
+    private String doctorSpecialization;
 }
