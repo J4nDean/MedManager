@@ -8,14 +8,20 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
-    @Query("SELECT d FROM Doctor d JOIN d.user u WHERE " +
-            "(:specjalizacja IS NULL OR LOWER(d.specjalizacja) LIKE LOWER(CONCAT('%', :specjalizacja, '%'))) AND " +
-            "(:searchName IS NULL OR LOWER(CONCAT(u.imie, ' ', u.nazwisko)) LIKE LOWER(CONCAT('%', :searchName, '%')))")
-    Page<Doctor> findBySpecjalizacjaAndName(
-            @Param("specjalizacja") String specjalizacja,
-            @Param("searchName") String searchName,
-            Pageable pageable
+    Optional<Doctor> findByUserId(Long userId);
+
+    @Query("SELECT d FROM Doctor d " +
+            "WHERE (:firstName is null OR lower(d.firstName) LIKE lower(concat('%', :firstName, '%'))) " +
+            "AND (:lastName is null OR lower(d.lastName) LIKE lower(concat('%', :lastName, '%'))) " +
+            "AND (:specialization is null OR lower(d.specialization) LIKE lower(concat('%', :specialization, '%')))")
+    List<Doctor> findByFilters(
+            @Param("firstName") String firstName,
+            @Param("lastName") String lastName,
+            @Param("specialization") String specialization
     );
 }

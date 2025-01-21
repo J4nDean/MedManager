@@ -1,53 +1,67 @@
 package com.example.backendmedmanager.controller;
 
-import com.example.backendmedmanager.dto.DoctorDto;
-import com.example.backendmedmanager.entity.Doctor;
+import com.example.backendmedmanager.dto.DoctorDTO;
+import com.example.backendmedmanager.dto.PatientDTO;
+import com.example.backendmedmanager.dto.PatientDetailsDTO;
+import com.example.backendmedmanager.dto.PrescriptionDTO;
 import com.example.backendmedmanager.service.DoctorService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/doctors")
-@CrossOrigin(origins = "http://localhost:3000")
-@RequiredArgsConstructor
 public class DoctorController {
     private final DoctorService doctorService;
 
-    @GetMapping
-    public ResponseEntity<Page<DoctorDto>> getAllDoctors(
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) String specialization,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
-    ) {
-        Page<Doctor> doctorsPage = doctorService.findDoctors(name, specialization, PageRequest.of(page, size));
-
-        Page<DoctorDto> doctorDtos = doctorsPage.map(doctor -> DoctorDto.builder()
-                .id(doctor.getId())
-                .imie(doctor.getUser().getImie())
-                .nazwisko(doctor.getUser().getNazwisko())
-                .email(doctor.getUser().getEmail())
-                .telefon(doctor.getUser().getTelefon())
-                .specjalizacja(doctor.getSpecjalizacja())
-                .build());
-
-        return ResponseEntity.ok(doctorDtos);
+    public DoctorController(DoctorService doctorService) {
+        this.doctorService = doctorService;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<DoctorDto> registerDoctor(@RequestBody DoctorDto doctorDto) {
-        Doctor newDoctor = doctorService.registerDoctor(doctorDto);
-        DoctorDto response = DoctorDto.builder()
-                .id(newDoctor.getId())
-                .imie(newDoctor.getUser().getImie())
-                .nazwisko(newDoctor.getUser().getNazwisko())
-                .email(newDoctor.getUser().getEmail())
-                .telefon(newDoctor.getUser().getTelefon())
-                .specjalizacja(newDoctor.getSpecjalizacja())
-                .build();
-        return ResponseEntity.ok(response);
+    @GetMapping
+    public ResponseEntity<List<DoctorDTO>> getAllDoctors() {
+        return ResponseEntity.ok(doctorService.getAllDoctors());
+    }
+
+    @GetMapping("/{doctorId}/patients")
+    public ResponseEntity<List<PatientDTO>> getDoctorPatients(@PathVariable Long doctorId) {
+        return ResponseEntity.ok(doctorService.getPatientsByDoctor(doctorId));
+    }
+
+    @GetMapping("/{doctorId}/patients/{patientId}")
+    public ResponseEntity<PatientDetailsDTO> getPatientDetails(
+            @PathVariable Long doctorId,
+            @PathVariable Long patientId) {
+        return ResponseEntity.ok(doctorService.getPatientWithPrescriptions(doctorId, patientId));
+    }
+
+    @PostMapping("/{doctorId}/patients/{patientId}/prescriptions")
+    public ResponseEntity<PrescriptionDTO> createPrescription(
+            @PathVariable Long doctorId,
+            @PathVariable Long patientId,
+            @RequestParam String description,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime expiryDate) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(doctorService.addPrescription(doctorId, patientId, description, expiryDate));
+    }
+
+    @DeleteMapping("/{doctorId}/prescriptions/{prescriptionId}")
+    public ResponseEntity<Void> deletePrescription(
+            @PathVariable Long doctorId,
+            @PathVariable Long prescriptionId) {
+        doctorService.removePrescription(doctorId, prescriptionId);
+        return ResponseEntity.noContent().build();
+    }
+
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<String> handleRuntimeException(RuntimeException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ex.getMessage());
     }
 }

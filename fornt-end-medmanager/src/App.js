@@ -1,22 +1,23 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navigation from './components/Navigation';
-import DoctorPanel from './pages/DoctorPanel';
-import './styles.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import DoctorDashboard from './components/DoctorDashboard';
+import PatientDetails from './components/PatientDetails';
+import Sidebar from './components/Sidebar';
 
-const App = () => {
+function App() {
     return (
         <Router>
-            <div className="app-wrapper">
-                <Navigation />
-                <div className="content-wrapper">
+            <div className="app">
+                <Sidebar />
+                <div className="content">
                     <Routes>
-                        <Route path="/" element={<DoctorPanel />} />
+                        <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
+                        <Route path="/doctor/patients/:patientId" element={<PatientDetails />} />
                     </Routes>
                 </div>
             </div>
         </Router>
     );
-};
+}
 
 export default App;

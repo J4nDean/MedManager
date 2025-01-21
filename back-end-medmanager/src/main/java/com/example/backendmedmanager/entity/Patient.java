@@ -7,10 +7,10 @@ import java.util.Set;
 import java.util.HashSet;
 
 @Entity
-@Table(name = "doctors")
+@Table(name = "patients")
 @Getter
 @Setter
-public class Doctor {
+public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,15 +21,15 @@ public class Doctor {
     @Column(name = "last_name")
     private String lastName;
 
-    private String specialization;
+    private String pesel;
 
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "doctor")
-    private Set<DoctorPatient> patients = new HashSet<>();
+    @OneToMany(mappedBy = "patient")
+    private Set<DoctorPatient> doctors = new HashSet<>();
 
-    @OneToMany(mappedBy = "doctor")
+    @OneToMany(mappedBy = "patient")
     private Set<Prescription> prescriptions = new HashSet<>();
 }

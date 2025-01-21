@@ -1,3 +1,37 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Styl dla sidebar */
+.sidebar {
+    width: 250px;
+    background: white;
+    height: 100vh;
+    position: fixed;
+    border-right: 1px solid #eee;
+}
+
+/* Styl dla zawartości */
+.content {
+    margin-left: 250px;
+    padding: 20px;
+    background-color: #f9fafb;
+    min-height: 100vh;
+}
+
+/* Styl dla tabeli */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.table th {
+    background: #f3f4f6;
+    font-weight: bold;
+}

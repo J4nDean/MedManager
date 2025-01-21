@@ -1,40 +1,37 @@
 package com.example.backendmedmanager.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import java.time.LocalDate;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "recepta")
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "prescriptions")
+@Getter
+@Setter
 public class Prescription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "data_wystawienia", nullable = false)
-    private LocalDate dataWystawienia;
+    @ManyToOne
+    @JoinColumn(name = "doctor_id", nullable = false)
+    private Doctor doctor;
 
-    @Column(name = "data_wygasniecia", nullable = false)
-    private LocalDate dataWygasniecia;
+    @ManyToOne
+    @JoinColumn(name = "patient_id", nullable = false)
+    private Patient patient;
+
+    @Column(nullable = false)
+    private String description;
+
+    @Column(name = "issue_date", nullable = false)
+    private LocalDateTime issueDate;
+
+    @Column(name = "expiry_date", nullable = false)
+    private LocalDateTime expiryDate;
 
     @Column(nullable = false)
     private String status;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_pacjent", nullable = false)
-    private User pacjent;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_lekarz", nullable = false)
-    private User lekarz;
-
-    @Column(name = "lek", nullable = false)
-    private String lek;
 }

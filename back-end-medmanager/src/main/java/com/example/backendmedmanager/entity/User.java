@@ -1,42 +1,29 @@
 package com.example.backendmedmanager.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "uzytkownicy")
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "users")
+@Getter
+@Setter
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "imie", nullable = false)
-    private String imie;
+    @Column(nullable = false, unique = true)
+    private String login;
 
-    @Column(name = "nazwisko", nullable = false)
-    private String nazwisko;
-
-    @Column(name = "pesel", length = 11, nullable = false, unique = true)
-    private String pesel;
-
-    @Column(name = "email", nullable = false, unique = true)
-    private String email;
-
-    @Column(name = "haslo", nullable = false)
-    private String haslo;
-
-    @Column(name = "telefon", length = 9)
-    private String telefon;
+    @Column(nullable = false)
+    private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "rola", nullable = false)
-    @Builder.Default
-    private UserRole rola = UserRole.PACJENT;
+    @Column(nullable = false)
+    private UserRole role;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt = LocalDateTime.now();
 }

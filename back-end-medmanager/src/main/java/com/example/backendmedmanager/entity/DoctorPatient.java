@@ -1,31 +1,27 @@
 package com.example.backendmedmanager.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import java.time.LocalDate;
+import lombok.Getter;
+import lombok.Setter;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "pacjenci_lekarz")
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "doctor_patients")
+@Getter
+@Setter
 public class DoctorPatient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "data_rejestracji", nullable = false)
-    private LocalDate dataRejestracji;
+    @ManyToOne
+    @JoinColumn(name = "doctor_id")
+    private Doctor doctor;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_pacjent", nullable = false)
-    private User pacjent;
+    @ManyToOne
+    @JoinColumn(name = "patient_id")
+    private Patient patient;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_lekarz", nullable = false)
-    private User lekarz;
+    @Column(name = "assignment_date")
+    private LocalDateTime assignmentDate = LocalDateTime.now();
 }
