@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 function HomePage() {
     const [doctors, setDoctors] = useState([]);
@@ -61,8 +62,23 @@ function HomePage() {
 
     return (
         <div className="home-page">
+            <div className="hero-section">
+                <div className="hero-content">
+                    <h1 className="hero-title">MedManager</h1>
+                    <p className="hero-subtitle">
+                        Nowoczesne rozwiązanie w zarządzaniu dokumentacją medyczną
+                    </p>
+                    <p className="hero-description">
+                        Oferujemy kompleksowy system do bezpiecznego zarządzania receptami,
+                        zapewniając płynną komunikację między pracownikami służby zdrowia a pacjentami.
+                        Nasza platforma gwarantuje wygodny dostęp do historii leczenia przy zachowaniu
+                        najwyższych standardów bezpieczeństwa.
+                    </p>
+                </div>
+            </div>
+
             <div className="page-header">
-                <h1 className="page-title">Lista Lekarzy</h1>
+                <h2 className="page-title">Lista Lekarzy</h2>
             </div>
 
             <div className="card mb-6">

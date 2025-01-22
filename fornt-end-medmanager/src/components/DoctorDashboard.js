@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 function DoctorDashboard() {
     const { doctorId } = useParams();
+    const [doctor, setDoctor] = useState(null);
     const [patients, setPatients] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -11,9 +12,23 @@ function DoctorDashboard() {
     const API_BASE_URL = 'http://localhost:8080';
 
     useEffect(() => {
-        const fetchPatients = async () => {
+        const fetchDoctorData = async () => {
             try {
                 setLoading(true);
+                const response = await fetch(`${API_BASE_URL}/api/doctors/${doctorId}`);
+                if (!response.ok) {
+                    throw new Error('Nie udało się pobrać danych lekarza');
+                }
+                const data = await response.json();
+                setDoctor(data);
+            } catch (err) {
+                console.error('Błąd:', err);
+                setError('Wystąpił błąd podczas pobierania danych lekarza');
+            }
+        };
+
+        const fetchPatients = async () => {
+            try {
                 const response = await fetch(`${API_BASE_URL}/api/doctors/${doctorId}/patients`);
                 if (!response.ok) {
                     throw new Error('Nie udało się pobrać listy pacjentów');
@@ -28,7 +43,7 @@ function DoctorDashboard() {
             }
         };
 
-        fetchPatients();
+        Promise.all([fetchDoctorData(), fetchPatients()]);
     }, [doctorId]);
 
     if (loading) {
@@ -39,13 +54,38 @@ function DoctorDashboard() {
         );
     }
 
+    if (!doctor) {
+        return (
+            <div className="dashboard-container">
+                <div className="error-message">
+                    Nie udało się załadować danych lekarza
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="dashboard-container">
-            <div className="dashboard-header">
-                <h1 className="dashboard-title">Panel Lekarza</h1>
-                <p className="dashboard-subtitle">
-                    Zarządzaj swoimi pacjentami i receptami
-                </p>
+            <div className="card mb-6">
+                <div className="card-header">
+                    <div className="profile-grid">
+                        <div>
+                            <p className="text-base font-light text-gray-600 mb-1">
+                                System recept
+                            </p>
+                            <div className="mb-1">
+                                <span className="text-base font-normal text-gray-600">Lekarz: </span>
+                                <span className="text-[1.5rem] font-semibold text-gray-900 font-sans">
+                                    {doctor.firstName} {doctor.lastName}
+                                </span>
+                            </div>
+                            <div className="text-base text-gray-600">
+                                <span>Specjalizacja: </span>
+                                <span>{doctor.specialization}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             {error && (

@@ -26,6 +26,16 @@ public class DoctorController {
         this.doctorService = doctorService;
     }
 
+    @GetMapping("/{doctorId}")
+    public ResponseEntity<DoctorDTO> getDoctorById(@PathVariable Long doctorId) {
+        try {
+            DoctorDTO doctor = doctorService.getDoctorById(doctorId);
+            return ResponseEntity.ok(doctor);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @GetMapping
     public ResponseEntity<List<DoctorDTO>> getAllDoctors() {
         logger.info("Fetching all doctors");

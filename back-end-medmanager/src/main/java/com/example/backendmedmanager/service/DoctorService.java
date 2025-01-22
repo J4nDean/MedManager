@@ -39,6 +39,17 @@ public class DoctorService {
         this.patientRepository = patientRepository;
     }
 
+    public DoctorDTO getDoctorById(Long doctorId) {
+        try {
+            Doctor doctor = doctorRepository.findById(doctorId)
+                    .orElseThrow(() -> new RuntimeException("Nie znaleziono lekarza o ID: " + doctorId));
+            return convertToDto(doctor);
+        } catch (Exception e) {
+            logger.error("Error fetching doctor with ID {}: ", doctorId, e);
+            throw new RuntimeException("Błąd podczas pobierania danych lekarza", e);
+        }
+    }
+
     public List<DoctorDTO> getAllDoctors() {
         try {
             logger.debug("Fetching all doctors with users");
@@ -58,11 +69,10 @@ public class DoctorService {
         dto.setLastName(doctor.getLastName());
         dto.setSpecialization(doctor.getSpecialization());
 
-        // Enhanced email handling
         if (doctor.getUser() != null && doctor.getUser().getLogin() != null) {
             dto.setEmail(doctor.getUser().getLogin());
         } else {
-            dto.setEmail("Brak adresu email"); // Default value when email is missing
+            dto.setEmail("Brak adresu email");
             logger.debug("No email found for doctor with ID: {}", doctor.getId());
         }
 

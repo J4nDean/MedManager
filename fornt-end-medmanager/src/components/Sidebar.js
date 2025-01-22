@@ -1,10 +1,34 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 function Sidebar() {
     const location = useLocation();
+    const navigate = useNavigate();
+    const userRole = localStorage.getItem('userRole');
+    const userId = localStorage.getItem('userId');
+    const isAuthenticated = localStorage.getItem('token');
 
     const isActive = (path) => {
         return location.pathname === path ? 'active' : '';
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userRole');
+        localStorage.removeItem('userId');
+        navigate('/');
+    };
+
+    const handleLogin = () => {
+        navigate('/login');
+    };
+
+    const getDashboardLink = () => {
+        if (userRole === 'DOCTOR') {
+            return `/doctors/${userId}/dashboard`;
+        } else if (userRole === 'PATIENT') {
+            return `/patients/${userId}/dashboard`;
+        }
+        return '/';
     };
 
     return (
@@ -15,15 +39,52 @@ function Sidebar() {
             <nav className="sidebar-nav">
                 <ul className="nav-list">
                     <li>
-                        <Link
-                            to="/"
-                            className={`nav-item ${isActive('/')}`}
-                        >
+                        <Link to="/" className={`nav-item ${isActive('/')}`}>
                             Strona Główna
                         </Link>
                     </li>
+
+                    {userRole === 'DOCTOR' && (
+                        <li>
+                            <Link
+                                to={getDashboardLink()}
+                                className={`nav-item ${isActive(getDashboardLink())}`}
+                            >
+                                System Recept
+                            </Link>
+                        </li>
+                    )}
+
+                    {userRole === 'PATIENT' && (
+                        <li>
+                            <Link
+                                to={getDashboardLink()}
+                                className={`nav-item ${isActive(getDashboardLink())}`}
+                            >
+                                Mój Profil
+                            </Link>
+                        </li>
+                    )}
                 </ul>
             </nav>
+
+            <div className="sidebar-footer">
+                {isAuthenticated ? (
+                    <button
+                        onClick={handleLogout}
+                        className="logout-button"
+                    >
+                        Wyloguj się
+                    </button>
+                ) : (
+                    <button
+                        onClick={handleLogin}
+                        className="login-button"
+                    >
+                        Zaloguj się
+                    </button>
+                )}
+            </div>
         </div>
     );
 }

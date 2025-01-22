@@ -82,7 +82,22 @@ const PatientDashboard = () => {
     }
 
     return (
-        <div className="patient-dashboard">
+        <div className="dashboard-container">
+            <div className="card mb-6">
+                <div className="card-header">
+                    <div className="profile-grid">
+                        <div>
+                            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                                {patient.firstName} {patient.lastName}
+                            </h1>
+                            <p className="text-lg text-gray-600">
+                                PESEL: {patient.pesel}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             {error && (
                 <div className="error-message">
                     {error}
@@ -91,67 +106,57 @@ const PatientDashboard = () => {
 
             <div className="card">
                 <div className="card-header">
-                    <h1 className="dashboard-heading">Profil Pacjenta</h1>
+                    <h2 className="text-lg font-medium">Dane kontaktowe</h2>
                 </div>
                 <div className="card-content">
-                    <div className="profile-grid">
-                        <div>
-                            <p className="profile-label">Imię i Nazwisko</p>
-                            <p className="profile-value">{patient.firstName} {patient.lastName}</p>
-                        </div>
-                        <div>
-                            <p className="profile-label">PESEL</p>
-                            <p className="profile-value">{patient.pesel}</p>
-                        </div>
-                        <div className="profile-grid-full">
-                            <p className="profile-label">Email</p>
-                            {isEditingEmail ? (
-                                <div className="email-edit-container">
-                                    <input
-                                        type="email"
-                                        value={newEmail}
-                                        onChange={(e) => setNewEmail(e.target.value)}
-                                        className="form-input email-input"
-                                        placeholder="Wprowadź nowy email"
-                                    />
-                                    <button
-                                        onClick={handleEmailUpdate}
-                                        className="icon-button icon-button-save"
-                                        title="Zapisz"
-                                    >
-                                        <Save size={20} />
-                                    </button>
-                                    <button
-                                        onClick={() => {
-                                            setIsEditingEmail(false);
-                                            setNewEmail(patient.email || '');
-                                        }}
-                                        className="icon-button icon-button-cancel"
-                                        title="Anuluj"
-                                    >
-                                        <X size={20} />
-                                    </button>
-                                </div>
-                            ) : (
-                                <div className="email-edit-container">
-                                    <p className="profile-value">{patient.email || 'Brak adresu email'}</p>
-                                    <button
-                                        onClick={() => setIsEditingEmail(true)}
-                                        className="icon-button icon-button-edit"
-                                        title="Edytuj email"
-                                    >
-                                        <Mail size={20} />
-                                    </button>
-                                </div>
-                            )}
-                        </div>
+                    <div className="profile-grid-full">
+                        <p className="profile-label">Email</p>
+                        {isEditingEmail ? (
+                            <div className="email-edit-container">
+                                <input
+                                    type="email"
+                                    value={newEmail}
+                                    onChange={(e) => setNewEmail(e.target.value)}
+                                    className="form-input email-input"
+                                    placeholder="Wprowadź nowy email"
+                                />
+                                <button
+                                    onClick={handleEmailUpdate}
+                                    className="icon-button icon-button-save"
+                                    title="Zapisz"
+                                >
+                                    <Save size={20} />
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setIsEditingEmail(false);
+                                        setNewEmail(patient.email || '');
+                                    }}
+                                    className="icon-button icon-button-cancel"
+                                    title="Anuluj"
+                                >
+                                    <X size={20} />
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="email-edit-container">
+                                <p className="profile-value">{patient.email || 'Brak adresu email'}</p>
+                                <button
+                                    onClick={() => setIsEditingEmail(true)}
+                                    className="icon-button icon-button-edit"
+                                    title="Edytuj email"
+                                >
+                                    <Mail size={20} />
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
 
             <div className="card">
                 <div className="card-header">
-                    <h2 className="prescriptions-heading">Recepty</h2>
+                    <h2 className="text-lg font-medium">Historia recept</h2>
                 </div>
                 <div className="card-content">
                     {prescriptions.length > 0 ? (
