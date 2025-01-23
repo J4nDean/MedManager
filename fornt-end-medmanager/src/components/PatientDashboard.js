@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, Save, X } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 
 const PatientDashboard = () => {
@@ -49,9 +48,7 @@ const PatientDashboard = () => {
         try {
             const response = await fetch(`${API_BASE_URL}/api/patients/${patientId}/email`, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: newEmail }),
             });
 
@@ -65,88 +62,62 @@ const PatientDashboard = () => {
         }
     };
 
-    if (loading) {
-        return (
-            <div className="loading-state">
-                <p>Ładowanie danych...</p>
-            </div>
-        );
-    }
-
-    if (!patient) {
-        return (
-            <div className="error-message">
-                Nie znaleziono danych pacjenta
-            </div>
-        );
-    }
+    if (loading) return <div className="loading-state">Ładowanie danych...</div>;
+    if (!patient) return <div className="error-message">Nie znaleziono danych pacjenta</div>;
 
     return (
-        <div className="dashboard-container">
-            <div className="card mb-6">
+        <div className="container">
+            <div className="card">
                 <div className="card-header">
-                    <div className="profile-grid">
-                        <div>
-                            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                                {patient.firstName} {patient.lastName}
-                            </h1>
-                            <p className="text-lg text-gray-600">
-                                PESEL: {patient.pesel}
-                            </p>
-                        </div>
-                    </div>
+                    <h1 className="text-2xl font-bold">
+                        {patient.firstName} {patient.lastName}
+                    </h1>
+                    <p className="text-gray-600">PESEL: {patient.pesel}</p>
                 </div>
             </div>
 
-            {error && (
-                <div className="error-message">
-                    {error}
-                </div>
-            )}
+            {error && <div className="error-message">{error}</div>}
 
             <div className="card">
                 <div className="card-header">
-                    <h2 className="text-lg font-medium">Dane kontaktowe</h2>
+                    <h2 className="text-xl font-semibold">Dane kontaktowe</h2>
                 </div>
                 <div className="card-content">
-                    <div className="profile-grid-full">
-                        <p className="profile-label">Email</p>
+                    <div className="form-group">
+                        <label className="form-label">Email</label>
                         {isEditingEmail ? (
-                            <div className="email-edit-container">
+                            <div className="flex gap-2">
                                 <input
                                     type="email"
                                     value={newEmail}
                                     onChange={(e) => setNewEmail(e.target.value)}
-                                    className="form-input email-input"
+                                    className="form-input"
                                     placeholder="Wprowadź nowy email"
                                 />
                                 <button
                                     onClick={handleEmailUpdate}
-                                    className="icon-button icon-button-save"
-                                    title="Zapisz"
+                                    className="btn btn-primary"
                                 >
-                                    <Save size={20} />
+                                    Zapisz
                                 </button>
                                 <button
                                     onClick={() => {
                                         setIsEditingEmail(false);
                                         setNewEmail(patient.email || '');
                                     }}
-                                    className="icon-button icon-button-cancel"
-                                    title="Anuluj"
+                                    className="btn btn-secondary"
                                 >
-                                    <X size={20} />
+                                    Anuluj
                                 </button>
                             </div>
                         ) : (
-                            <div className="email-edit-container">
-                                <p className="profile-value">{patient.email || 'Brak adresu email'}</p>
+                            <div className="flex gap-2 items-center">
+                                <span>{patient.email || 'Brak adresu email'}</span>
                                 <button
                                     onClick={() => setIsEditingEmail(true)}
-                                    className="icon-button icon-button-edit"
-                                    title="Edytuj email"
+                                    className="btn btn-secondary"
                                 >
-                                    <Mail size={20} />
+                                    Edytuj
                                 </button>
                             </div>
                         )}
@@ -156,7 +127,7 @@ const PatientDashboard = () => {
 
             <div className="card">
                 <div className="card-header">
-                    <h2 className="text-lg font-medium">Historia recept</h2>
+                    <h2 className="text-xl font-semibold">Historia recept</h2>
                 </div>
                 <div className="card-content">
                     {prescriptions.length > 0 ? (
@@ -184,16 +155,16 @@ const PatientDashboard = () => {
                                         {new Date(prescription.expiryDate).toLocaleDateString('pl-PL')}
                                     </td>
                                     <td>
-                                        <span className={`status-badge status-${prescription.status.toLowerCase()}`}>
-                                            {prescription.status}
-                                        </span>
+                                            <span className={`status-badge status-${prescription.status.toLowerCase()}`}>
+                                                {prescription.status}
+                                            </span>
                                     </td>
                                 </tr>
                             ))}
                             </tbody>
                         </table>
                     ) : (
-                        <p className="empty-prescriptions">
+                        <p className="text-gray-500 text-center py-4">
                             Brak aktywnych recept
                         </p>
                     )}

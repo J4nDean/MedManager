@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Search } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 
 function HomePage() {
     const [doctors, setDoctors] = useState([]);
@@ -36,12 +34,7 @@ function HomePage() {
         }
     };
 
-    const mappedDoctors = doctors.map(doctor => ({
-        ...doctor,
-        email: doctor.email || 'Brak adresu email'
-    }));
-
-    const filteredDoctors = mappedDoctors.filter(doctor => {
+    const filteredDoctors = doctors.filter(doctor => {
         const fullName = `${doctor.firstName} ${doctor.lastName}`.toLowerCase();
         const searchLower = searchQuery.toLowerCase();
         const matchesSearch = fullName.includes(searchLower);
@@ -54,53 +47,47 @@ function HomePage() {
     const currentDoctors = filteredDoctors.slice(indexOfFirstDoctor, indexOfLastDoctor);
     const totalPages = Math.ceil(filteredDoctors.length / ITEMS_PER_PAGE);
 
-    if (loading) return (
-        <div className="loading-state">
-            <p>Ładowanie danych...</p>
-        </div>
-    );
+    if (loading) {
+        return <div className="loading-state">Ładowanie danych...</div>;
+    }
 
     return (
-        <div className="home-page">
+        <div className="container mx-auto px-4">
             <div className="hero-section">
-                <div className="hero-content">
-                    <h1 className="hero-title">MedManager</h1>
-                    <p className="hero-subtitle">
-                        Nowoczesne rozwiązanie w zarządzaniu dokumentacją medyczną
-                    </p>
-                    <p className="hero-description">
-                        Oferujemy kompleksowy system do bezpiecznego zarządzania receptami,
-                        zapewniając płynną komunikację między pracownikami służby zdrowia a pacjentami.
-                        Nasza platforma gwarantuje wygodny dostęp do historii leczenia przy zachowaniu
-                        najwyższych standardów bezpieczeństwa.
-                    </p>
+                <h1 className="hero-title">
+                    MedManager
+                </h1>
+                <p className="hero-subtitle">
+                    Nowoczesne rozwiązanie w zarządzaniu dokumentacją medyczną
+                </p>
+                <p className="hero-description">
+                    Oferujemy kompleksowy system do bezpiecznego zarządzania receptami,
+                    zapewniając płynną komunikację między pracownikami służby zdrowia a pacjentami.
+                    Nasza platforma gwarantuje wygodny dostęp do historii leczenia przy zachowaniu
+                    najwyższych standardów bezpieczeństwa.
+                </p>
+            </div>
+
+            <div className="card mb-8">
+                <div className="card-header">
+                    <h2 className="text-2xl font-semibold">Lista Lekarzy</h2>
                 </div>
-            </div>
-
-            <div className="page-header">
-                <h2 className="page-title">Lista Lekarzy</h2>
-            </div>
-
-            <div className="card mb-6">
                 <div className="card-content">
-                    <div className="search-grid">
-                        <div className="search-field">
-                            <label className="form-label">Wyszukaj po imieniu lub nazwisku</label>
-                            <div className="search-input-wrapper">
-                                <Search className="search-icon" size={20} />
-                                <input
-                                    type="text"
-                                    className="form-input search-input"
-                                    placeholder="Wprowadź imię lub nazwisko"
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                />
-                            </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div className="form-group">
+                            <label className="form-label">Wyszukaj lekarza</label>
+                            <input
+                                type="text"
+                                className="form-input"
+                                placeholder="Wprowadź imię lub nazwisko"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
                         </div>
-                        <div className="search-field">
+                        <div className="form-group">
                             <label className="form-label">Filtruj po specjalizacji</label>
                             <select
-                                className="form-input"
+                                className="form-select"
                                 value={specialtyFilter}
                                 onChange={(e) => setSpecialtyFilter(e.target.value)}
                             >
@@ -113,17 +100,9 @@ function HomePage() {
                             </select>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            {error && (
-                <div className="error-message">
-                    {error}
-                </div>
-            )}
+                    {error && <div className="error-message">{error}</div>}
 
-            <div className="card">
-                <div className="card-content">
                     <table className="table">
                         <thead>
                         <tr>
@@ -136,7 +115,7 @@ function HomePage() {
                         {currentDoctors.map(doctor => (
                             <tr key={doctor.id}>
                                 <td>{doctor.firstName} {doctor.lastName}</td>
-                                <td>{doctor.email}</td>
+                                <td>{doctor.email || 'Brak adresu email'}</td>
                                 <td>{doctor.specialization}</td>
                             </tr>
                         ))}
@@ -151,32 +130,34 @@ function HomePage() {
                     </table>
 
                     {totalPages > 1 && (
-                        <div className="pagination">
-                            <button
-                                className="pagination-button"
-                                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                                disabled={currentPage === 1}
-                            >
-                                Poprzednia
-                            </button>
-
-                            {Array.from({ length: totalPages }, (_, i) => i + 1).map(number => (
+                        <div className="pagination-container">
+                            <div className="pagination">
                                 <button
-                                    key={number}
-                                    className={`pagination-button ${currentPage === number ? 'active' : ''}`}
-                                    onClick={() => setCurrentPage(number)}
+                                    className="btn btn-secondary"
+                                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                                    disabled={currentPage === 1}
                                 >
-                                    {number}
+                                    Poprzednia
                                 </button>
-                            ))}
 
-                            <button
-                                className="pagination-button"
-                                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                                disabled={currentPage === totalPages}
-                            >
-                                Następna
-                            </button>
+                                {Array.from({ length: totalPages }, (_, i) => i + 1).map(number => (
+                                    <button
+                                        key={number}
+                                        className={`btn ${currentPage === number ? 'btn-primary' : 'btn-secondary'}`}
+                                        onClick={() => setCurrentPage(number)}
+                                    >
+                                        {number}
+                                    </button>
+                                ))}
+
+                                <button
+                                    className="btn btn-secondary"
+                                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                                    disabled={currentPage === totalPages}
+                                >
+                                    Następna
+                                </button>
+                            </div>
                         </div>
                     )}
                 </div>

@@ -36,10 +36,14 @@ function Sidebar() {
             <div className="sidebar-header">
                 <h1 className="sidebar-logo">MedManager</h1>
             </div>
+
             <nav className="sidebar-nav">
                 <ul className="nav-list">
                     <li>
-                        <Link to="/" className={`nav-item ${isActive('/')}`}>
+                        <Link
+                            to="/"
+                            className={`nav-item ${isActive('/')}`}
+                        >
                             Strona Główna
                         </Link>
                     </li>
@@ -65,6 +69,17 @@ function Sidebar() {
                             </Link>
                         </li>
                     )}
+
+                    {!isAuthenticated && (
+                        <li>
+                            <Link
+                                to="/register"
+                                className={`nav-item ${isActive('/register')}`}
+                            >
+                                Rejestracja
+                            </Link>
+                        </li>
+                    )}
                 </ul>
             </nav>
 
@@ -72,14 +87,14 @@ function Sidebar() {
                 {isAuthenticated ? (
                     <button
                         onClick={handleLogout}
-                        className="logout-button"
+                        className="btn btn-danger w-full"
                     >
                         Wyloguj się
                     </button>
                 ) : (
                     <button
                         onClick={handleLogin}
-                        className="login-button"
+                        className="btn btn-primary w-full"
                     >
                         Zaloguj się
                     </button>

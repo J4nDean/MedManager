@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Trash2 } from 'lucide-react';
+import BackButton from './BackButton';
 
 function PatientDetails() {
     const { doctorId, patientId } = useParams();
@@ -81,14 +81,14 @@ function PatientDetails() {
         }
     };
 
-    if (!patient) return <div>Ładowanie...</div>;
+    if (!patient) return <div className="loading-state">Ładowanie...</div>;
 
-    const getStatusClass = (status) => {
+    const getStatusBadgeClass = (status) => {
         switch (status) {
-            case 'ACTIVE': return 'status-active';
-            case 'EXPIRED': return 'status-expired';
-            case 'COMPLETED': return 'status-completed';
-            default: return '';
+            case 'ACTIVE': return 'status-badge status-active';
+            case 'EXPIRED': return 'status-badge status-expired';
+            case 'COMPLETED': return 'status-badge status-completed';
+            default: return 'status-badge';
         }
     };
 
@@ -102,99 +102,108 @@ function PatientDetails() {
     };
 
     return (
-        <div className="patient-page">
-            <div className="patient-header">
-                <div className="patient-info">
-                    <div>
-                        <h2 className="patient-name">{patient.firstName} {patient.lastName}</h2>
-                        <p className="patient-pesel">PESEL: {patient.pesel}</p>
-                    </div>
-                    <div>
-                        <p className="text-sm text-gray-600">Data przypisania:</p>
-                        <p className="text-sm font-medium">
-                            {new Date(patient.assignmentDate).toLocaleDateString()}
-                        </p>
-                    </div>
+        <div className="container">
+            <BackButton />
+
+            <div className="card mt-4">
+                <div className="card-header">
+                    <h1 className="text-2xl font-bold">
+                        {patient.firstName} {patient.lastName}
+                    </h1>
+                    <p className="text-gray-600">PESEL: {patient.pesel}</p>
+                    <p className="text-gray-600">
+                        Data przypisania: {new Date(patient.assignmentDate).toLocaleDateString()}
+                    </p>
                 </div>
             </div>
 
-            <div className="content-grid">
-                <div className="card">
-                    <div className="card-header">
-                        Nowa Recepta
-                    </div>
-                    <div className="card-content">
-                        {error && <div className="error-message">{error}</div>}
-                        <div className="form-group">
-                            <label className="form-label">Opis</label>
-                            <textarea
-                                className="form-textarea"
-                                placeholder="Wprowadź opis recepty"
-                                value={newPrescription.description}
-                                onChange={e => setNewPrescription({...newPrescription, description: e.target.value})}
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label className="form-label">Data ważności</label>
-                            <input
-                                type="datetime-local"
-                                className="form-input"
-                                value={newPrescription.expiryDate}
-                                onChange={e => setNewPrescription({...newPrescription, expiryDate: e.target.value})}
-                            />
-                        </div>
-                        <button
-                            onClick={handleAddPrescription}
-                            className="btn btn-primary"
-                        >
-                            Dodaj receptę
-                        </button>
-                    </div>
-                </div>
+            {error && <div className="error-message">{error}</div>}
 
-                {/* Lista recept */}
-                <div className="card">
-                    <div className="card-header">
-                        Historia Recept
+            <div className="card">
+                <div className="card-header">
+                    <h2 className="text-xl font-semibold">Nowa Recepta</h2>
+                </div>
+                <div className="card-content">
+                    <div className="form-group">
+                        <label className="form-label">Opis</label>
+                        <textarea
+                            className="form-textarea"
+                            placeholder="Wprowadź opis recepty"
+                            value={newPrescription.description}
+                            onChange={e => setNewPrescription({
+                                ...newPrescription,
+                                description: e.target.value
+                            })}
+                        />
                     </div>
-                    <div className="card-content">
-                        <table className="table">
-                            <thead>
-                            <tr>
-                                <th>Lekarz</th>
-                                <th>Opis</th>
-                                <th>Data wystawienia</th>
-                                <th>Data ważności</th>
-                                <th>Status</th>
-                                <th>Akcje</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {patient.prescriptions?.map(prescription => (
-                                <tr key={prescription.id}>
-                                    <td>{prescription.doctorFirstName} {prescription.doctorLastName}</td>
-                                    <td>{prescription.description}</td>
-                                    <td>{new Date(prescription.issueDate).toLocaleString()}</td>
-                                    <td>{new Date(prescription.expiryDate).toLocaleString()}</td>
-                                    <td>
-                                        <span className={`status-badge ${getStatusClass(prescription.status)}`}>
+                    <div className="form-group">
+                        <label className="form-label">Data ważności</label>
+                        <input
+                            type="datetime-local"
+                            className="form-input"
+                            value={newPrescription.expiryDate}
+                            onChange={e => setNewPrescription({
+                                ...newPrescription,
+                                expiryDate: e.target.value
+                            })}
+                        />
+                    </div>
+                    <button
+                        onClick={handleAddPrescription}
+                        className="btn btn-primary"
+                    >
+                        Dodaj receptę
+                    </button>
+                </div>
+            </div>
+
+            <div className="card">
+                <div className="card-header">
+                    <h2 className="text-xl font-semibold">Historia Recept</h2>
+                </div>
+                <div className="card-content">
+                    <table className="table">
+                        <thead>
+                        <tr>
+                            <th>Lekarz</th>
+                            <th>Opis</th>
+                            <th>Data wystawienia</th>
+                            <th>Data ważności</th>
+                            <th>Status</th>
+                            <th>Akcje</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {patient.prescriptions?.map(prescription => (
+                            <tr key={prescription.id}>
+                                <td>{prescription.doctorFirstName} {prescription.doctorLastName}</td>
+                                <td>{prescription.description}</td>
+                                <td>{new Date(prescription.issueDate).toLocaleString()}</td>
+                                <td>{new Date(prescription.expiryDate).toLocaleString()}</td>
+                                <td>
+                                        <span className={getStatusBadgeClass(prescription.status)}>
                                             {getStatusText(prescription.status)}
                                         </span>
-                                    </td>
-                                    <td>
-                                        <button
-                                            onClick={() => handleDeletePrescription(prescription.id)}
-                                            className="btn-icon text-red-600 hover:text-red-700"
-                                            title="Usuń receptę"
-                                        >
-                                            <Trash2 size={20} />
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                            </tbody>
-                        </table>
-                    </div>
+                                </td>
+                                <td>
+                                    <button
+                                        onClick={() => handleDeletePrescription(prescription.id)}
+                                        className="btn btn-danger"
+                                    >
+                                        Usuń
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                        {!patient.prescriptions?.length && (
+                            <tr>
+                                <td colSpan="6" className="text-center text-gray-500 py-4">
+                                    Brak recept
+                                </td>
+                            </tr>
+                        )}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

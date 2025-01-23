@@ -1,4 +1,4 @@
-import { ArrowLeft } from 'lucide-react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const BackButton = () => {
@@ -7,10 +7,9 @@ const BackButton = () => {
     return (
         <button
             onClick={() => navigate(-1)}
-            className="back-button"
+            className="btn btn-secondary"
         >
-            <ArrowLeft size={20} />
-            <span>Wróć</span>
+            Wróć
         </button>
     );
 };

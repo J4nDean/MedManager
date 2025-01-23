@@ -28,12 +28,11 @@ function App() {
         <Router>
             <div className="app-container">
                 <Sidebar />
-                <div className="main-content">
+                <main className="main-content">
                     <Routes>
                         <Route path="/" element={<HomePage />} />
                         <Route path="/login" element={<LoginForm />} />
                         <Route path="/register" element={<RegisterForm />} />
-
                         <Route
                             path="/doctors/:doctorId/dashboard"
                             element={
@@ -43,7 +42,6 @@ function App() {
                                 />
                             }
                         />
-
                         <Route
                             path="/doctors/:doctorId/patient/:patientId"
                             element={
@@ -53,7 +51,6 @@ function App() {
                                 />
                             }
                         />
-
                         <Route
                             path="/patients/:patientId/dashboard"
                             element={
@@ -64,7 +61,7 @@ function App() {
                             }
                         />
                     </Routes>
-                </div>
+                </main>
             </div>
         </Router>
     );

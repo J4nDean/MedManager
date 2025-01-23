@@ -12,93 +12,59 @@ function DoctorDashboard() {
     const API_BASE_URL = 'http://localhost:8080';
 
     useEffect(() => {
-        const fetchDoctorData = async () => {
-            try {
-                setLoading(true);
-                const response = await fetch(`${API_BASE_URL}/api/doctors/${doctorId}`);
-                if (!response.ok) {
-                    throw new Error('Nie udało się pobrać danych lekarza');
-                }
-                const data = await response.json();
-                setDoctor(data);
-            } catch (err) {
-                console.error('Błąd:', err);
-                setError('Wystąpił błąd podczas pobierania danych lekarza');
-            }
-        };
-
-        const fetchPatients = async () => {
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/doctors/${doctorId}/patients`);
-                if (!response.ok) {
-                    throw new Error('Nie udało się pobrać listy pacjentów');
-                }
-                const data = await response.json();
-                setPatients(data);
-            } catch (err) {
-                console.error('Błąd:', err);
-                setError('Wystąpił błąd podczas pobierania danych');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        Promise.all([fetchDoctorData(), fetchPatients()]);
+        Promise.all([
+            fetchDoctorData(),
+            fetchPatients()
+        ]);
     }, [doctorId]);
 
-    if (loading) {
-        return (
-            <div className="main-content">
-                <div className="loading-state">Ładowanie...</div>
-            </div>
-        );
-    }
+    const fetchDoctorData = async () => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/doctors/${doctorId}`);
+            if (!response.ok) throw new Error('Nie udało się pobrać danych lekarza');
+            const data = await response.json();
+            setDoctor(data);
+        } catch (err) {
+            setError('Wystąpił błąd podczas pobierania danych lekarza');
+            console.error('Error:', err);
+        }
+    };
 
-    if (!doctor) {
-        return (
-            <div className="dashboard-container">
-                <div className="error-message">
-                    Nie udało się załadować danych lekarza
-                </div>
-            </div>
-        );
-    }
+    const fetchPatients = async () => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/doctors/${doctorId}/patients`);
+            if (!response.ok) throw new Error('Nie udało się pobrać listy pacjentów');
+            const data = await response.json();
+            setPatients(data);
+        } catch (err) {
+            setError('Wystąpił błąd podczas pobierania danych');
+            console.error('Error:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    if (loading) return <div className="loading-state">Ładowanie...</div>;
+    if (!doctor) return <div className="error-message">Nie udało się załadować danych lekarza</div>;
 
     return (
-        <div className="dashboard-container">
-            <div className="card mb-6">
+        <div className="container">
+            <div className="card">
                 <div className="card-header">
-                    <div className="profile-grid">
-                        <div>
-                            <p className="text-base font-light text-gray-600 mb-1">
-                                System recept
-                            </p>
-                            <div className="mb-1">
-                                <span className="text-base font-normal text-gray-600">Lekarz: </span>
-                                <span className="text-[1.5rem] font-semibold text-gray-900 font-sans">
-                                    {doctor.firstName} {doctor.lastName}
-                                </span>
-                            </div>
-                            <div className="text-base text-gray-600">
-                                <span>Specjalizacja: </span>
-                                <span>{doctor.specialization}</span>
-                            </div>
-                        </div>
+                    <div className="profile-info">
+                        <h1 className="text-2xl font-bold">Dr {doctor.firstName} {doctor.lastName}</h1>
+                        <p className="text-gray-600">{doctor.specialization}</p>
                     </div>
                 </div>
             </div>
 
-            {error && (
-                <div className="error-message">
-                    {error}
-                </div>
-            )}
+            {error && <div className="error-message">{error}</div>}
 
             <div className="card">
                 <div className="card-header">
-                    <h2 className="text-lg font-medium">Lista Pacjentów</h2>
+                    <h2 className="text-xl font-semibold">Lista Pacjentów</h2>
                 </div>
-                <div className="table-container">
+                <div className="card-content">
                     <table className="table">
                         <thead>
                         <tr>
@@ -115,11 +81,7 @@ function DoctorDashboard() {
                                     <td>{patient.firstName} {patient.lastName}</td>
                                     <td>{patient.pesel}</td>
                                     <td>
-                                        {new Date(patient.assignmentDate).toLocaleDateString('pl-PL', {
-                                            day: 'numeric',
-                                            month: 'long',
-                                            year: 'numeric'
-                                        })}
+                                        {new Date(patient.assignmentDate).toLocaleDateString('pl-PL')}
                                     </td>
                                     <td>
                                         <button
@@ -133,7 +95,7 @@ function DoctorDashboard() {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="4" className="text-center py-4 text-gray-500">
+                                <td colSpan="4" className="text-center text-gray-500">
                                     Nie znaleziono żadnych pacjentów
                                 </td>
                             </tr>

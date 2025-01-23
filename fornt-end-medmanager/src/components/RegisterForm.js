@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AlertCircle } from 'lucide-react';
 
 const RegisterForm = () => {
     const navigate = useNavigate();
@@ -87,155 +86,132 @@ const RegisterForm = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-8">
-                <div>
-                    <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                        Rejestracja
-                    </h2>
-                </div>
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+            <div className="max-w-md w-full px-6 py-12">
+                <h2 className="text-center text-3xl font-bold text-gray-900 mb-8">
+                    Rejestracja
+                </h2>
 
-                <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-                    <div className="rounded-md shadow-sm space-y-4">
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">
-                                Typ konta
-                            </label>
-                            <select
-                                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
-                                value={formData.role}
-                                onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                            >
-                                <option value="PATIENT">Pacjent</option>
-                                <option value="DOCTOR">Lekarz</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">
-                                Imię
-                            </label>
-                            <input
-                                type="text"
-                                required
-                                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                value={formData.firstName}
-                                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                            />
-                            {errors.firstName && (
-                                <p className="mt-1 text-sm text-red-600">{errors.firstName}</p>
-                            )}
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">
-                                Nazwisko
-                            </label>
-                            <input
-                                type="text"
-                                required
-                                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                value={formData.lastName}
-                                onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                            />
-                            {errors.lastName && (
-                                <p className="mt-1 text-sm text-red-600">{errors.lastName}</p>
-                            )}
-                        </div>
-
-                        {formData.role === 'PATIENT' && (
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">
-                                    PESEL
-                                </label>
-                                <input
-                                    type="text"
-                                    required
-                                    className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                    value={formData.pesel}
-                                    onChange={(e) => setFormData({ ...formData, pesel: e.target.value })}
-                                />
-                                {errors.pesel && (
-                                    <p className="mt-1 text-sm text-red-600">{errors.pesel}</p>
-                                )}
-                            </div>
-                        )}
-
-                        {formData.role === 'DOCTOR' && (
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">
-                                    Specjalizacja
-                                </label>
-                                <input
-                                    type="text"
-                                    required
-                                    className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                    value={formData.specialization}
-                                    onChange={(e) => setFormData({ ...formData, specialization: e.target.value })}
-                                />
-                                {errors.specialization && (
-                                    <p className="mt-1 text-sm text-red-600">{errors.specialization}</p>
-                                )}
-                            </div>
-                        )}
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">
-                                Email
-                            </label>
-                            <input
-                                type="email"
-                                required
-                                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                value={formData.email}
-                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            />
-                            {errors.email && (
-                                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-                            )}
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">
-                                Hasło
-                            </label>
-                            <input
-                                type="password"
-                                required
-                                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                value={formData.password}
-                                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                            />
-                            {errors.password && (
-                                <p className="mt-1 text-sm text-red-600">{errors.password}</p>
-                            )}
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">
-                                Potwierdź hasło
-                            </label>
-                            <input
-                                type="password"
-                                required
-                                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                value={formData.confirmPassword}
-                                onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                            />
-                            {errors.confirmPassword && (
-                                <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
-                            )}
-                        </div>
+                {serverError && (
+                    <div className="error-message">
+                        {serverError}
                     </div>
+                )}
 
-                    <div>
-                        <button
-                            type="submit"
-                            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                <form className="space-y-6" onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label className="form-label">Typ konta</label>
+                        <select
+                            className="form-select"
+                            value={formData.role}
+                            onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                         >
-                            Zarejestruj się
-                        </button>
+                            <option value="PATIENT">Pacjent</option>
+                            <option value="DOCTOR">Lekarz</option>
+                        </select>
                     </div>
+
+                    <div className="form-group">
+                        <label className="form-label">Imię</label>
+                        <input
+                            type="text"
+                            className="form-input"
+                            value={formData.firstName}
+                            onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                        />
+                        {errors.firstName && (
+                            <p className="error-text">{errors.firstName}</p>
+                        )}
+                    </div>
+
+                    <div className="form-group">
+                        <label className="form-label">Nazwisko</label>
+                        <input
+                            type="text"
+                            className="form-input"
+                            value={formData.lastName}
+                            onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                        />
+                        {errors.lastName && (
+                            <p className="error-text">{errors.lastName}</p>
+                        )}
+                    </div>
+
+                    {formData.role === 'PATIENT' && (
+                        <div className="form-group">
+                            <label className="form-label">PESEL</label>
+                            <input
+                                type="text"
+                                className="form-input"
+                                value={formData.pesel}
+                                onChange={(e) => setFormData({ ...formData, pesel: e.target.value })}
+                            />
+                            {errors.pesel && (
+                                <p className="error-text">{errors.pesel}</p>
+                            )}
+                        </div>
+                    )}
+
+                    {formData.role === 'DOCTOR' && (
+                        <div className="form-group">
+                            <label className="form-label">Specjalizacja</label>
+                            <input
+                                type="text"
+                                className="form-input"
+                                value={formData.specialization}
+                                onChange={(e) => setFormData({ ...formData, specialization: e.target.value })}
+                            />
+                            {errors.specialization && (
+                                <p className="error-text">{errors.specialization}</p>
+                            )}
+                        </div>
+                    )}
+
+                    <div className="form-group">
+                        <label className="form-label">Email</label>
+                        <input
+                            type="email"
+                            className="form-input"
+                            value={formData.email}
+                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        />
+                        {errors.email && (
+                            <p className="error-text">{errors.email}</p>
+                        )}
+                    </div>
+
+                    <div className="form-group">
+                        <label className="form-label">Hasło</label>
+                        <input
+                            type="password"
+                            className="form-input"
+                            value={formData.password}
+                            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                        />
+                        {errors.password && (
+                            <p className="error-text">{errors.password}</p>
+                        )}
+                    </div>
+
+                    <div className="form-group">
+                        <label className="form-label">Potwierdź hasło</label>
+                        <input
+                            type="password"
+                            className="form-input"
+                            value={formData.confirmPassword}
+                            onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                        />
+                        {errors.confirmPassword && (
+                            <p className="error-text">{errors.confirmPassword}</p>
+                        )}
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="btn btn-primary w-full"
+                    >
+                        Zarejestruj się
+                    </button>
                 </form>
             </div>
         </div>
