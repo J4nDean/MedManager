@@ -33,11 +33,9 @@ public class AuthService {
 
     public AuthResponseDTO login(LoginDTO loginDTO) {
         try {
-            // Find user by login (email)
             User user = userRepository.findByLogin(loginDTO.getLogin())
                     .orElseThrow(() -> new RuntimeException("Nieprawidłowy email lub hasło"));
 
-            // Direct password comparison
             if (!loginDTO.getPassword().equals(user.getPassword())) {
                 throw new RuntimeException("Nieprawidłowy email lub hasło");
             }
@@ -48,7 +46,6 @@ public class AuthService {
                         .orElseThrow(() -> new RuntimeException("Nie znaleziono lekarza"));
                 entityId = doctor.getId();
             } else if ("PATIENT".equals(user.getRole())) {
-                // Updated to use correct method
                 Patient patient = patientRepository.findByUserId(user.getId())
                         .orElseThrow(() -> new RuntimeException("Nie znaleziono pacjenta"));
                 entityId = patient.getId();

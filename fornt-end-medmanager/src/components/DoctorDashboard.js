@@ -52,8 +52,8 @@ function DoctorDashboard() {
             <div className="card">
                 <div className="card-header">
                     <div className="profile-info">
-                        <h1 className="text-2xl font-bold">Dr {doctor.firstName} {doctor.lastName}</h1>
-                        <p className="text-gray-600">{doctor.specialization}</p>
+                        <p className="doctor-name">Lekarz: <span>{doctor.firstName} {doctor.lastName}</span></p>
+                        <p className="doctor-specialization">Specjalizacja: <span>{doctor.specialization}</span></p>
                     </div>
                 </div>
             </div>

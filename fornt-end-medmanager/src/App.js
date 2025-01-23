@@ -6,7 +6,6 @@ import Sidebar from './components/Sidebar';
 import HomePage from './components/HomePage';
 import PatientDashboard from './components/PatientDashboard';
 import LoginForm from './components/LoginForm';
-import RegisterForm from './components/RegisterForm';
 
 const PrivateRoute = ({ element, allowedRoles = [] }) => {
     const isAuthenticated = localStorage.getItem('token');
@@ -32,7 +31,6 @@ function App() {
                     <Routes>
                         <Route path="/" element={<HomePage />} />
                         <Route path="/login" element={<LoginForm />} />
-                        <Route path="/register" element={<RegisterForm />} />
                         <Route
                             path="/doctors/:doctorId/dashboard"
                             element={

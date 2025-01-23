@@ -48,52 +48,45 @@ const LoginForm = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
-            <div className="max-w-md w-full px-6">
-                <div className="text-center mb-8">
-                    <h2 className="text-3xl font-bold text-gray-900">
-                        Logowanie do systemu
-                    </h2>
+        <div className="login-container top-left no-box">
+            <h2 className="login-title">Zaloguj się</h2>
+            {error && (
+                <div className="error-message">
+                    {error}
+                </div>
+            )}
+
+            <form className="login-form" onSubmit={handleSubmit}>
+                <div className="form-group">
+                    <label className="form-label">Email</label>
+                    <input
+                        type="email"
+                        required
+                        className="form-input"
+                        value={formData.login}
+                        onChange={(e) => setFormData({ ...formData, login: e.target.value })}
+                    />
                 </div>
 
-                {error && (
-                    <div className="error-message">
-                        {error}
-                    </div>
-                )}
+                <div className="form-group">
+                    <label className="form-label">Hasło</label>
+                    <input
+                        type="password"
+                        required
+                        className="form-input"
+                        value={formData.password}
+                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    />
+                </div>
 
-                <form className="space-y-6" onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label className="form-label">Email</label>
-                        <input
-                            type="email"
-                            required
-                            className="form-input"
-                            value={formData.login}
-                            onChange={(e) => setFormData({ ...formData, login: e.target.value })}
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label className="form-label">Hasło</label>
-                        <input
-                            type="password"
-                            required
-                            className="form-input"
-                            value={formData.password}
-                            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                        />
-                    </div>
-
-                    <button
-                        type="submit"
-                        disabled={isLoading}
-                        className="btn btn-primary w-full"
-                    >
-                        {isLoading ? 'Logowanie...' : 'Zaloguj się'}
-                    </button>
-                </form>
-            </div>
+                <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="btn btn-primary"
+                >
+                    {isLoading ? 'Logowanie...' : 'Zaloguj się'}
+                </button>
+            </form>
         </div>
     );
 };

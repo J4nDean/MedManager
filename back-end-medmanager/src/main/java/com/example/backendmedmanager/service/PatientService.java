@@ -32,7 +32,6 @@ public class PatientService {
         this.userRepository = userRepository;
     }
 
-    // Nowa metoda do pobierania recept
     public List<PrescriptionDTO> getPatientPrescriptions(Long patientId) {
         List<Prescription> prescriptions = prescriptionRepository.findByPatientIdOrderByIssueDateDesc(patientId);
         return prescriptions.stream()

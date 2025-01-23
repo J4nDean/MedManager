@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Global styles */
 body {
     margin: 0;
     padding: 0;
@@ -10,7 +9,6 @@ body {
     background-color: #f3f4f6;
 }
 
-/* Layout */
 .app-container {
     display: flex;
     min-height: 100vh;
@@ -23,7 +21,6 @@ body {
     min-height: 100vh;
 }
 
-/* Sidebar */
 .sidebar {
     width: 280px;
     height: 100vh;
@@ -50,7 +47,7 @@ body {
 }
 
 .sidebar-nav {
-    padding: 1.5rem;
+    padding: 1rem;
     flex: 1;
 }
 
@@ -64,12 +61,12 @@ body {
     display: block;
     width: calc(100% - 2rem);
     margin: 0 1rem;
-    padding: 0.75rem 1rem;
     border-radius: 0.5rem;
     color: #4b5563;
     text-decoration: none;
     transition: all 0.2s;
-    text-align: center;
+    text-align: left;
+    padding: 0.5rem 1rem;
 }
 
 .nav-item:hover,
@@ -83,7 +80,6 @@ body {
     border-top: 1px solid #e5e7eb;
 }
 
-/* Cards */
 .card {
     background: white;
     border-radius: 0.5rem;
@@ -100,7 +96,6 @@ body {
     padding: 1.5rem;
 }
 
-/* Forms */
 .form-container {
     max-width: 400px;
     margin: 0 auto;
@@ -138,7 +133,6 @@ body {
     box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
 }
 
-/* Tables */
 .table {
     width: 100%;
     border-collapse: collapse;
@@ -161,7 +155,48 @@ body {
     background-color: #f9fafb;
 }
 
-/* Buttons */
+.patient-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.patient-info {
+    flex: 1;
+}
+
+.patient-info h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #111827;
+}
+
+.patient-details {
+    color: #6B7280;
+}
+
+.patient-details p {
+    margin: 0.25rem 0;
+}
+
+.card {
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.card-content {
+    padding: 1.5rem;
+}
+
 .btn {
     display: inline-flex;
     align-items: center;
@@ -180,19 +215,23 @@ body {
     border: 2px solid #2563eb;
 }
 
-.btn-primary:hover {
+.btn-primary:active {
     background-color: #2563eb;
     color: white;
 }
 
 .btn-secondary {
+    margin-left: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
     background-color: white;
-    color: #4b5563;
-    border: 2px solid #4b5563;
+    color: #2563eb;
+    border: 2px solid #2563eb;
 }
 
-.btn-secondary:hover {
-    background-color: #4b5563;
+.btn-secondary:active {
+    background-color: #2563eb;
     color: white;
 }
 
@@ -202,13 +241,11 @@ body {
     border: 2px solid #dc2626;
 }
 
-.btn-danger:hover {
+.btn-danger:active {
     background-color: #dc2626;
     color: white;
 }
 
-
-/* Status badges */
 .status-badge {
     display: inline-flex;
     align-items: center;
@@ -236,47 +273,35 @@ body {
     border: 1px solid #374151;
 }
 
-/* Homepage Hero Section */
 .hero-section {
     text-align: center;
     padding: 4rem 2rem;
-    background: linear-gradient(to bottom, #f0f9ff, #e0f2fe);
+    background: white;
     border-radius: 1rem;
     margin-bottom: 3rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .hero-title {
-    font-size: 3.5rem;
-    font-weight: 800;
-    color: #1e40af;
-    margin-bottom: 1.5rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 1rem;
 }
 
 .hero-subtitle {
-    font-size: 1.5rem;
-    color: #1e40af;
-    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+    color: #4b5563;
+    margin-bottom: 1rem;
     font-weight: 500;
 }
 
 .hero-description {
-    max-width: 800px;
+    max-width: 600px;
     margin: 0 auto;
-    font-size: 1.125rem;
-    line-height: 1.75;
-    color: #334155;
-}
-
-/* Utilities */
-.error-message {
-    padding: 1rem;
-    margin-bottom: 1rem;
-    background-color: #fee2e2;
-    border: 1px solid #fecaca;
-    border-radius: 0.375rem;
-    color: #991b1b;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #374151;
 }
 
 .loading-state {
@@ -287,36 +312,88 @@ body {
     color: #6b7280;
 }
 
-/* Pagination */
+.profile-info {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.profile-info .doctor-name span,
+.profile-info .doctor-specialization span {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #111827;
+}
+
+.patient-info {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.patient-info .patient-name span,
+.patient-info .patient-pesel span {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #111827;
+}
+
+.contact-info {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.contact-info .contact-email span {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #111827;
+}
+
 .pagination-container {
     display: flex;
     justify-content: center;
-    width: 100%;
-    margin-top: 2rem;
+    padding: 1.5rem 0;
 }
 
 .pagination {
     display: flex;
     gap: 0.5rem;
-    justify-content: center;
     align-items: center;
-    padding: 1rem 0;
 }
 
 .pagination button {
-    min-width: 2.5rem;
-    height: 2.5rem;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
+    min-width: 2rem;
+    height: 2rem;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    border: 2px solid #2563eb;
 }
 
 .pagination button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    border-color: #d1d5db;
+    color: #6b7280;
 }
 
-/* Responsive */
+.pagination button.active {
+    background-color: #2563eb;
+    color: white;
+}
+
+.pagination .page-info {
+    margin: 0 1rem;
+    color: #4b5563;
+    font-size: 0.875rem;
+}
+
 @media (max-width: 1024px) {
     .sidebar {
         width: 240px;

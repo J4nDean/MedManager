@@ -103,17 +103,18 @@ function PatientDetails() {
 
     return (
         <div className="container">
-            <BackButton />
-
             <div className="card mt-4">
                 <div className="card-header">
-                    <h1 className="text-2xl font-bold">
-                        {patient.firstName} {patient.lastName}
-                    </h1>
-                    <p className="text-gray-600">PESEL: {patient.pesel}</p>
-                    <p className="text-gray-600">
-                        Data przypisania: {new Date(patient.assignmentDate).toLocaleDateString()}
-                    </p>
+                    <div className="patient-header">
+                        <div className="patient-info">
+                            <h1>{patient.firstName} {patient.lastName}</h1>
+                            <div className="patient-details">
+                                <p>PESEL: {patient.pesel}</p>
+                                <p>Data przypisania: {new Date(patient.assignmentDate).toLocaleDateString()}</p>
+                            </div>
+                        </div>
+                        <BackButton />
+                    </div>
                 </div>
             </div>
 
@@ -121,7 +122,7 @@ function PatientDetails() {
 
             <div className="card">
                 <div className="card-header">
-                    <h2 className="text-xl font-semibold">Nowa Recepta</h2>
+                    <h2>Nowa Recepta</h2>
                 </div>
                 <div className="card-content">
                     <div className="form-group">

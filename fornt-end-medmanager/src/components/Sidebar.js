@@ -69,17 +69,6 @@ function Sidebar() {
                             </Link>
                         </li>
                     )}
-
-                    {!isAuthenticated && (
-                        <li>
-                            <Link
-                                to="/register"
-                                className={`nav-item ${isActive('/register')}`}
-                            >
-                                Rejestracja
-                            </Link>
-                        </li>
-                    )}
                 </ul>
             </nav>
 

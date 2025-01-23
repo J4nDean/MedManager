@@ -69,10 +69,10 @@ const PatientDashboard = () => {
         <div className="container">
             <div className="card">
                 <div className="card-header">
-                    <h1 className="text-2xl font-bold">
-                        {patient.firstName} {patient.lastName}
-                    </h1>
-                    <p className="text-gray-600">PESEL: {patient.pesel}</p>
+                    <div className="patient-info">
+                        <p className="patient-name">Pacjent: <span>{patient.firstName} {patient.lastName}</span></p>
+                        <p className="patient-pesel">PESEL: <span>{patient.pesel}</span></p>
+                    </div>
                 </div>
             </div>
 
@@ -83,7 +83,7 @@ const PatientDashboard = () => {
                     <h2 className="text-xl font-semibold">Dane kontaktowe</h2>
                 </div>
                 <div className="card-content">
-                    <div className="form-group">
+                    <div className="contact-info">
                         <label className="form-label">Email</label>
                         {isEditingEmail ? (
                             <div className="flex gap-2">
@@ -112,7 +112,7 @@ const PatientDashboard = () => {
                             </div>
                         ) : (
                             <div className="flex gap-2 items-center">
-                                <span>{patient.email || 'Brak adresu email'}</span>
+                                <span className="contact-email"><span>{patient.email || 'Brak adresu email'}</span></span>
                                 <button
                                     onClick={() => setIsEditingEmail(true)}
                                     className="btn btn-secondary"
