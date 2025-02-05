@@ -59,25 +59,6 @@ npm start
 
 Po wykonaniu powyższych kroków, aplikacja będzie dostępna pod adresem http://localhost:3000.
 
-## Interfejs API
-
-System udostępnia następujące główne endpointy:
-
-Dla modułu autoryzacji:
-- Logowanie: POST /api/auth/login
-- Rejestracja: POST /api/auth/register
-
-Dla lekarzy:
-- Pobieranie danych lekarza: GET /api/doctors/{doctorId}
-- Lista pacjentów: GET /api/doctors/{doctorId}/patients
-- Tworzenie recepty: POST /api/doctors/{doctorId}/patients/{patientId}/prescriptions
-- Usuwanie recepty: DELETE /api/doctors/{doctorId}/prescriptions/{prescriptionId}
-
-Dla pacjentów:
-- Profil pacjenta: GET /api/patients/{id}
-- Historia recept: GET /api/patients/{id}/prescriptions
-- Aktualizacja maila: PUT /api/patients/{id}/email
-
 ## Bezpieczeństwo
 
 System implementuje następujące mechanizmy bezpieczeństwa:
