@@ -267,6 +267,12 @@ body {
     border: 1px solid #991b1b;
 }
 
+.status-filled {
+    background-color: #e5e7eb;
+    color: #1f2937;
+    border: 1px solid #6b7280;
+}
+
 .status-completed {
     background-color: #e5e7eb;
     color: #374151;

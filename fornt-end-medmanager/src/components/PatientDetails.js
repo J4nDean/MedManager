@@ -87,6 +87,7 @@ function PatientDetails() {
         switch (status) {
             case 'ACTIVE': return 'status-badge status-active';
             case 'EXPIRED': return 'status-badge status-expired';
+            case 'FILLED': return 'status-badge status-filled';
             case 'COMPLETED': return 'status-badge status-completed';
             default: return 'status-badge';
         }
@@ -96,6 +97,7 @@ function PatientDetails() {
         switch (status) {
             case 'ACTIVE': return 'Aktywna';
             case 'EXPIRED': return 'Wygasła';
+            case 'FILLED': return 'Wykorzystana';
             case 'COMPLETED': return 'Zrealizowana';
             default: return status;
         }
