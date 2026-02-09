@@ -41,7 +41,7 @@ public class PatientService {
 
     public void updatePatientEmail(Long patientId, String newEmail) {
         Patient patient = patientRepository.findById(patientId)
-                .orElseThrow(() -> new RuntimeException("Nie znaleziono pacjenta"));
+                .orElseThrow(() -> new RuntimeException("Patient not found"));
 
         User user = patient.getUser();
         if (user == null) {

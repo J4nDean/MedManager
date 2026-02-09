@@ -42,11 +42,11 @@ public class DoctorService {
     public DoctorDTO getDoctorById(Long doctorId) {
         try {
             Doctor doctor = doctorRepository.findById(doctorId)
-                    .orElseThrow(() -> new RuntimeException("Nie znaleziono lekarza o ID: " + doctorId));
+                    .orElseThrow(() -> new RuntimeException("Doctor not found with ID: " + doctorId));
             return convertToDto(doctor);
         } catch (Exception e) {
             logger.error("Error fetching doctor with ID {}: ", doctorId, e);
-            throw new RuntimeException("Błąd podczas pobierania danych lekarza", e);
+            throw new RuntimeException("Error while fetching doctor data", e);
         }
     }
 
@@ -62,6 +62,64 @@ public class DoctorService {
         }
     }
 
+    public PatientDTO addPatientToDoctor(Long doctorId, PatientDTO patientDTO) {
+        try {
+            if (patientDTO == null ||
+                    patientDTO.getFirstName() == null ||
+                    patientDTO.getLastName() == null ||
+                    patientDTO.getPesel() == null) {
+                throw new IllegalArgumentException("Invalid patient data");
+            }
+
+            Doctor doctor = doctorRepository.findById(doctorId)
+                    .orElseThrow(() -> new RuntimeException("Doctor not found"));
+
+            if (patientRepository.findByPesel(patientDTO.getPesel()).isPresent()) {
+                throw new RuntimeException("Patient with this PESEL already exists");
+            }
+
+            Patient patient = new Patient();
+            patient.setFirstName(patientDTO.getFirstName());
+            patient.setLastName(patientDTO.getLastName());
+            patient.setPesel(patientDTO.getPesel());
+
+            Patient savedPatient = patientRepository.save(patient);
+
+            DoctorPatient doctorPatient = new DoctorPatient();
+            doctorPatient.setDoctor(doctor);
+            doctorPatient.setPatient(savedPatient);
+            DoctorPatient savedRelation = doctorPatientRepository.save(doctorPatient);
+
+            return convertToPatientDto(savedPatient, savedRelation.getAssignmentDate());
+        } catch (Exception e) {
+            logger.error("Error while adding patient for doctor {}: ", doctorId, e);
+            throw new RuntimeException("Error while adding patient: " + e.getMessage(), e);
+        }
+    }
+
+    public PatientDTO assignExistingPatientToDoctor(Long doctorId, Long patientId) {
+        try {
+            Doctor doctor = doctorRepository.findById(doctorId)
+                    .orElseThrow(() -> new RuntimeException("Doctor not found"));
+            Patient patient = patientRepository.findById(patientId)
+                    .orElseThrow(() -> new RuntimeException("Patient not found"));
+
+            if (doctorPatientRepository.existsByDoctorIdAndPatientId(doctorId, patientId)) {
+                throw new RuntimeException("Doctor-patient connection already exists");
+            }
+
+            DoctorPatient doctorPatient = new DoctorPatient();
+            doctorPatient.setDoctor(doctor);
+            doctorPatient.setPatient(patient);
+            DoctorPatient savedRelation = doctorPatientRepository.save(doctorPatient);
+
+            return convertToPatientDto(patient, savedRelation.getAssignmentDate());
+        } catch (Exception e) {
+            logger.error("Error while assigning patient {} to doctor {}: ", patientId, doctorId, e);
+            throw new RuntimeException("Error while assigning patient: " + e.getMessage(), e);
+        }
+    }
+
     private DoctorDTO convertToDto(Doctor doctor) {
         DoctorDTO dto = new DoctorDTO();
         dto.setId(doctor.getId());
@@ -72,7 +130,7 @@ public class DoctorService {
         if (doctor.getUser() != null && doctor.getUser().getLogin() != null) {
             dto.setEmail(doctor.getUser().getLogin());
         } else {
-            dto.setEmail("Brak adresu email");
+            dto.setEmail("No email address");
             logger.debug("No email found for doctor with ID: {}", doctor.getId());
         }
 

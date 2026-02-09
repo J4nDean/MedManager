@@ -16,4 +16,5 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     // Keep existing methods
     @Query("SELECT p FROM Patient p LEFT JOIN FETCH p.user WHERE p.id = :id")
     Optional<Patient> findByIdWithUser(@Param("id") Long id);
+    Optional<Patient> findByPesel(String pesel);
 }

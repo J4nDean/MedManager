@@ -60,6 +60,21 @@ public class DoctorController {
         }
     }
 
+
+    @PostMapping("/{doctorId}/patients/{patientId}")
+    public ResponseEntity<PatientDTO> assignExistingPatientToDoctor(
+            @PathVariable Long doctorId,
+            @PathVariable Long patientId) {
+        logger.info("Assigning existing patient {} to doctor {}", patientId, doctorId);
+        try {
+            PatientDTO assigned = doctorService.assignExistingPatientToDoctor(doctorId, patientId);
+            return ResponseEntity.status(HttpStatus.CREATED).body(assigned);
+        } catch (Exception e) {
+            logger.error("Error assigning patient {} to doctor {}: ", patientId, doctorId, e);
+            throw new RuntimeException("Failed to assign patient");
+        }
+    }
+
     @GetMapping("/{doctorId}/patients/{patientId}")
     public ResponseEntity<PatientDetailsDTO> getPatientDetails(
             @PathVariable Long doctorId,
@@ -99,6 +114,8 @@ public class DoctorController {
             throw new RuntimeException("Failed to create prescription: " + e.getMessage());
         }
     }
+
+
 
     @DeleteMapping("/{doctorId}/prescriptions/{prescriptionId}")
     public ResponseEntity<Void> deletePrescription(

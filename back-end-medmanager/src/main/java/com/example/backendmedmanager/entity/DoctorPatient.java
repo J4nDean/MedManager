@@ -6,7 +6,9 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "doctor_patients")
+@Table(name = "doctor_patients", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"doctor_id", "patient_id"})
+})
 @Getter
 @Setter
 public class DoctorPatient {
