@@ -11,6 +11,8 @@ import com.example.backendmedmanager.repository.PatientRepository;
 import com.example.backendmedmanager.repository.PrescriptionRepository;
 import com.example.backendmedmanager.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class PatientService {
+    private static final Logger logger = LoggerFactory.getLogger(PatientService.class);
     private final PatientRepository patientRepository;
     private final PrescriptionRepository prescriptionRepository;
     private final UserRepository userRepository;
@@ -80,11 +83,26 @@ public class PatientService {
         dto.setIssueDate(prescription.getIssueDate());
         dto.setExpiryDate(prescription.getExpiryDate());
 
-        try {
-            dto.setStatus(PrescriptionStatus.valueOf(prescription.getStatus()));
-        } catch (IllegalArgumentException e) {
-            System.err.println("Invalid prescription status: " + prescription.getStatus());
-            dto.setStatus(PrescriptionStatus.ACTIVE);
+        String rawStatus = prescription.getStatus();
+        String normalizedStatus = rawStatus == null ? "" : rawStatus.trim().toUpperCase();
+        switch (normalizedStatus) {
+            case "ACTIVE":
+                dto.setStatus(PrescriptionStatus.ACTIVE);
+                break;
+            case "FILLED":
+            case "COMPLETED":
+                dto.setStatus(PrescriptionStatus.FILLED);
+                break;
+            case "EXPIRED":
+                dto.setStatus(PrescriptionStatus.EXPIRED);
+                break;
+            case "NEW":
+                dto.setStatus(PrescriptionStatus.ACTIVE);
+                break;
+            default:
+                logger.error("Invalid prescription status: {}", rawStatus);
+                dto.setStatus(PrescriptionStatus.ACTIVE);
+                break;
         }
 
         if (prescription.getDoctor() != null) {

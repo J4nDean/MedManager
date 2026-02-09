@@ -61,6 +61,24 @@ public class DoctorController {
     }
 
 
+    @PostMapping("/{doctorId}/patients")
+    public ResponseEntity<PatientDTO> addNewPatientToDoctor(
+            @PathVariable Long doctorId,
+            @RequestBody PatientDTO patientDTO) {
+        logger.info("Adding new patient to doctor {}", doctorId);
+        try {
+            if (patientDTO == null || patientDTO.getFirstName() == null || patientDTO.getLastName() == null || patientDTO.getPesel() == null) {
+                throw new IllegalArgumentException("Patient data is incomplete");
+            }
+            PatientDTO addedPatient = doctorService.addPatientToDoctor(doctorId, patientDTO);
+            logger.info("Successfully added new patient {} {} to doctor {}", patientDTO.getFirstName(), patientDTO.getLastName(), doctorId);
+            return ResponseEntity.status(HttpStatus.CREATED).body(addedPatient);
+        } catch (Exception e) {
+            logger.error("Error adding new patient to doctor {}: ", doctorId, e);
+            throw new RuntimeException("Failed to add patient: " + e.getMessage());
+        }
+    }
+
     @PostMapping("/{doctorId}/patients/{patientId}")
     public ResponseEntity<PatientDTO> assignExistingPatientToDoctor(
             @PathVariable Long doctorId,
@@ -71,7 +89,7 @@ public class DoctorController {
             return ResponseEntity.status(HttpStatus.CREATED).body(assigned);
         } catch (Exception e) {
             logger.error("Error assigning patient {} to doctor {}: ", patientId, doctorId, e);
-            throw new RuntimeException("Failed to assign patient");
+            throw new RuntimeException("Failed to assign patient: " + e.getMessage());
         }
     }
 

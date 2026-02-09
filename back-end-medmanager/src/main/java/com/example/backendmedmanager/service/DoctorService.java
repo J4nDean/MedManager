@@ -268,11 +268,26 @@ public class DoctorService {
         dto.setIssueDate(prescription.getIssueDate());
         dto.setExpiryDate(prescription.getExpiryDate());
 
-        try {
-            dto.setStatus(PrescriptionStatus.valueOf(prescription.getStatus()));
-        } catch (IllegalArgumentException e) {
-            logger.error("Invalid prescription status: {}", prescription.getStatus());
-            dto.setStatus(PrescriptionStatus.ACTIVE);
+        String rawStatus = prescription.getStatus();
+        String normalizedStatus = rawStatus == null ? "" : rawStatus.trim().toUpperCase();
+        switch (normalizedStatus) {
+            case "ACTIVE":
+                dto.setStatus(PrescriptionStatus.ACTIVE);
+                break;
+            case "FILLED":
+            case "COMPLETED":
+                dto.setStatus(PrescriptionStatus.FILLED);
+                break;
+            case "EXPIRED":
+                dto.setStatus(PrescriptionStatus.EXPIRED);
+                break;
+            case "NEW":
+                dto.setStatus(PrescriptionStatus.ACTIVE);
+                break;
+            default:
+                logger.error("Invalid prescription status: {}", rawStatus);
+                dto.setStatus(PrescriptionStatus.ACTIVE);
+                break;
         }
 
         if (prescription.getDoctor() != null) {
