@@ -1,6 +1,7 @@
 package com.example.backendmedmanager.controller;
 
 import com.example.backendmedmanager.dto.DoctorDTO;
+import com.example.backendmedmanager.dto.EmailUpdateDTO;
 import com.example.backendmedmanager.dto.PatientDTO;
 import com.example.backendmedmanager.dto.PatientDetailsDTO;
 import com.example.backendmedmanager.dto.PrescriptionDTO;
@@ -150,6 +151,20 @@ public class DoctorController {
         }
     }
 
+    @PutMapping("/{doctorId}/email")
+    public ResponseEntity<Void> updateDoctorEmail(
+            @PathVariable Long doctorId,
+            @RequestBody EmailUpdateDTO emailUpdate) {
+        logger.info("Updating email for doctor {}", doctorId);
+        try {
+            doctorService.updateDoctorEmail(doctorId, emailUpdate.getEmail());
+            logger.info("Successfully updated email for doctor {}", doctorId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            logger.error("Error updating email for doctor {}: ", doctorId, e);
+            throw new RuntimeException("Failed to update doctor email: " + e.getMessage());
+        }
+    }
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Map<String, String>> handleRuntimeException(RuntimeException ex) {
         Map<String, String> response = new HashMap<>();

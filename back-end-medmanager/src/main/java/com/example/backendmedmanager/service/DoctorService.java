@@ -9,6 +9,7 @@ import com.example.backendmedmanager.repository.DoctorPatientRepository;
 import com.example.backendmedmanager.repository.DoctorRepository;
 import com.example.backendmedmanager.repository.PatientRepository;
 import com.example.backendmedmanager.repository.PrescriptionRepository;
+import com.example.backendmedmanager.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
@@ -28,15 +29,18 @@ public class DoctorService {
     private final DoctorPatientRepository doctorPatientRepository;
     private final PrescriptionRepository prescriptionRepository;
     private final PatientRepository patientRepository;
+    private final UserRepository userRepository;
 
     public DoctorService(DoctorRepository doctorRepository,
                          DoctorPatientRepository doctorPatientRepository,
                          PrescriptionRepository prescriptionRepository,
-                         PatientRepository patientRepository) {
+                         PatientRepository patientRepository,
+                         UserRepository userRepository) {
         this.doctorRepository = doctorRepository;
         this.doctorPatientRepository = doctorPatientRepository;
         this.prescriptionRepository = prescriptionRepository;
         this.patientRepository = patientRepository;
+        this.userRepository = userRepository;
     }
 
     public DoctorDTO getDoctorById(Long doctorId) {
@@ -297,5 +301,35 @@ public class DoctorService {
         }
 
         return dto;
+    }
+
+    public void updateDoctorEmail(Long doctorId, String newEmail) {
+        Doctor doctor = doctorRepository.findById(doctorId)
+                .orElseThrow(() -> new RuntimeException("Doctor not found"));
+
+        if (newEmail == null || newEmail.trim().isEmpty()) {
+            throw new RuntimeException("Email cannot be empty");
+        }
+
+        User user = doctor.getUser();
+        String currentEmail = user != null ? user.getLogin() : null;
+
+        if (!newEmail.equals(currentEmail)) {
+            if (userRepository.findByLogin(newEmail).isPresent()) {
+                throw new RuntimeException("Email already exists");
+            }
+        }
+
+        if (user == null) {
+            user = new User();
+            user.setLogin(newEmail);
+            user = userRepository.save(user);
+            doctor.setUser(user);
+        } else {
+            user.setLogin(newEmail);
+            userRepository.save(user);
+        }
+
+        doctorRepository.save(doctor);
     }
 }

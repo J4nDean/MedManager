@@ -46,7 +46,19 @@ public class PatientService {
         Patient patient = patientRepository.findById(patientId)
                 .orElseThrow(() -> new RuntimeException("Patient not found"));
 
+        if (newEmail == null || newEmail.trim().isEmpty()) {
+            throw new RuntimeException("Email cannot be empty");
+        }
+
         User user = patient.getUser();
+        String currentEmail = user != null ? user.getLogin() : null;
+
+        if (!newEmail.equals(currentEmail)) {
+            if (userRepository.findByLogin(newEmail).isPresent()) {
+                throw new RuntimeException("Email already exists");
+            }
+        }
+
         if (user == null) {
             user = new User();
             user.setLogin(newEmail);
