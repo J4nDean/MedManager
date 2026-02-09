@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 
 const PatientDashboard = () => {
@@ -12,12 +12,7 @@ const PatientDashboard = () => {
 
     const API_BASE_URL = 'http://localhost:8080';
 
-    useEffect(() => {
-        fetchPatientData();
-        fetchPrescriptions();
-    }, [patientId]);
-
-    const fetchPatientData = async () => {
+    const fetchPatientData = useCallback(async () => {
         try {
             const response = await fetch(`${API_BASE_URL}/api/patients/${patientId}`);
             if (!response.ok) throw new Error('Nie udało się pobrać danych pacjenta');
@@ -28,9 +23,9 @@ const PatientDashboard = () => {
             setError('Wystąpił błąd podczas pobierania danych pacjenta');
             console.error('Error:', err);
         }
-    };
+    }, [patientId]);
 
-    const fetchPrescriptions = async () => {
+    const fetchPrescriptions = useCallback(async () => {
         try {
             const response = await fetch(`${API_BASE_URL}/api/patients/${patientId}/prescriptions`);
             if (!response.ok) throw new Error('Nie udało się pobrać recept');
@@ -42,7 +37,12 @@ const PatientDashboard = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [patientId]);
+
+    useEffect(() => {
+        fetchPatientData();
+        fetchPrescriptions();
+    }, [fetchPatientData, fetchPrescriptions]);
 
     const handleEmailUpdate = async () => {
         try {

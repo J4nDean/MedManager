@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import BackButton from './BackButton';
 
@@ -13,11 +13,7 @@ function PatientDetails() {
 
     const API_BASE_URL = 'http://localhost:8080';
 
-    useEffect(() => {
-        fetchPatientDetails();
-    }, [patientId, doctorId]);
-
-    const fetchPatientDetails = async () => {
+    const fetchPatientDetails = useCallback(async () => {
         try {
             const response = await fetch(`${API_BASE_URL}/api/doctors/${doctorId}/patients/${patientId}`);
             if (!response.ok) throw new Error('Failed to fetch patient details');
@@ -27,7 +23,11 @@ function PatientDetails() {
             setError('Error loading patient details');
             console.error('Error:', err);
         }
-    };
+    }, [doctorId, patientId]);
+
+    useEffect(() => {
+        fetchPatientDetails();
+    }, [fetchPatientDetails]);
 
     const handleAddPrescription = async () => {
         try {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 function DoctorDashboard() {
@@ -11,14 +11,7 @@ function DoctorDashboard() {
 
     const API_BASE_URL = 'http://localhost:8080';
 
-    useEffect(() => {
-        Promise.all([
-            fetchDoctorData(),
-            fetchPatients()
-        ]);
-    }, [doctorId]);
-
-    const fetchDoctorData = async () => {
+    const fetchDoctorData = useCallback(async () => {
         try {
             const response = await fetch(`${API_BASE_URL}/api/doctors/${doctorId}`);
             if (!response.ok) throw new Error('Nie udało się pobrać danych lekarza');
@@ -28,9 +21,9 @@ function DoctorDashboard() {
             setError('Wystąpił błąd podczas pobierania danych lekarza');
             console.error('Error:', err);
         }
-    };
+    }, [doctorId]);
 
-    const fetchPatients = async () => {
+    const fetchPatients = useCallback(async () => {
         try {
             const response = await fetch(`${API_BASE_URL}/api/doctors/${doctorId}/patients`);
             if (!response.ok) throw new Error('Nie udało się pobrać listy pacjentów');
@@ -42,7 +35,14 @@ function DoctorDashboard() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [doctorId]);
+
+    useEffect(() => {
+        Promise.all([
+            fetchDoctorData(),
+            fetchPatients()
+        ]);
+    }, [fetchDoctorData, fetchPatients]);
 
     if (loading) return <div className="loading-state">Ładowanie...</div>;
     if (!doctor) return <div className="error-message">Nie udało się załadować danych lekarza</div>;
